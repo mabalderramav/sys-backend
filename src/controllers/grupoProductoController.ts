@@ -2,8 +2,14 @@
 import { Request, Response } from 'express';
 import { GrupoProductoService } from '../services/grupoProductoService';
 import { GrupoProducto } from '../models/grupoProducto';
+import { GrupoProductoRepository } from '../repositories/postgress/GrupoProductoRepository';
+// import { GrupoProductoRepository } from '../repositories/mongodb/GrupoProductoRepository';
 
-const grupoProductoService = new GrupoProductoService();
+// Instanciamos el repositorio
+const grupoProductoRepository = new GrupoProductoRepository();
+
+// Inyectar el repositorio en el servicio
+const grupoProductoService = new GrupoProductoService(grupoProductoRepository);
 
 export const registrarGrupoProducto = async (req: Request, res: Response): Promise<void> => {
   const grupoProducto: GrupoProducto = req.body;

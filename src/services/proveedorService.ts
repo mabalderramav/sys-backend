@@ -1,11 +1,15 @@
 // src/services/proveedorService.ts
-
-import pool from '../database';
+import { IProveedorRepository } from '../interfaces/IProveedorRepository';
 import { Proveedor } from '../models/proveedor';
 
 export class ProveedorService {
+  private proveedorRepository: IProveedorRepository;
+
+  constructor(proveedorRepository: IProveedorRepository) {
+    this.proveedorRepository = proveedorRepository;
+  }
+
   async registrarProveedorProducto(proveedor: Proveedor): Promise<void> {
-    const { nombreProveedor } = proveedor;
-    await pool.query(`INSERT INTO proveedores (nombre_proveedor) VALUES ($1)`, [nombreProveedor]);
+    await this.proveedorRepository.registrarProveedorProducto(proveedor);
   }
 }

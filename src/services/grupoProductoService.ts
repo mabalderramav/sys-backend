@@ -1,15 +1,15 @@
 // src/services/grupoProductoService.ts
-import { IGrupoProductoService } from '../interfaces/IGrupoProductoService';
+import { IGrupoProductoRepository } from '../interfaces/IGrupoProductoRepository';
 import { GrupoProducto } from '../models/grupoProducto';
-import pool from '../database';
 
-export class GrupoProductoService implements IGrupoProductoService {
+export class GrupoProductoService {
+  private grupoProductoRepository: IGrupoProductoRepository;
+
+  constructor(grupoProductoRepository: IGrupoProductoRepository) {
+    this.grupoProductoRepository = grupoProductoRepository;
+  }
+
   async registrarGrupoProducto(grupoProducto: GrupoProducto): Promise<void> {
-    const { codGrupoProducto, nombreGrupoProducto } = grupoProducto;
-    await pool.query(
-      `INSERT INTO grupos_productos (cod_grupo_producto, nombre_grupo_producto)
-       VALUES ($1, $2)`,
-      [codGrupoProducto, nombreGrupoProducto]
-    );
+    await this.grupoProductoRepository.registrarGrupoProducto(grupoProducto);
   }
 }

@@ -2,9 +2,9 @@ import { IEntidadStrategy } from '../IEntidadStrategy';
 import pool from '../../database';
 
 export class ProductoStrategy implements IEntidadStrategy {
-  private action: 'crear' | 'obtener';
+  private action: 'crear' | 'obtener' | 'crear-precio';
 
-  constructor(action: 'crear' | 'obtener') {
+  constructor(action: any) {
     this.action = action;
   }
 
@@ -12,6 +12,7 @@ export class ProductoStrategy implements IEntidadStrategy {
     const getQuery = {
       crear: this.crearProductoQuery(),
       obtener: this.obtenerProductoQuery(),
+      'crear-precio': this.registrarPrecioProductoQuery(),
     };
 
     const query = getQuery[this.action] || 'Acción no soportada';
@@ -30,6 +31,11 @@ export class ProductoStrategy implements IEntidadStrategy {
 
   private obtenerProductoQuery(): string {
     const query = 'SELECT * FROM productos WHERE sku = $1';
+    return query;
+  }
+
+  private registrarPrecioProductoQuery(): string {
+    const query = 'UPDATE productos SET precio_lista = $1 WHERE sku = $2';
     return query;
   }
 }

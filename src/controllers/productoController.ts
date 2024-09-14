@@ -18,7 +18,14 @@ export const registrarProducto = async (req: Request, res: Response): Promise<vo
 };
 
 export const obtenerProductoPorSku = async (req: Request, res: Response): Promise<void> => {
-  const { id } = req.params;
-  await productoService.obtenerProductoPorSku(id);
-  res.status(201).send('Producto encontrado');
+  const { sku } = req.params;
+  const result = await productoService.obtenerProductoPorSku(sku);
+  res.status(200).json(result);
+};
+
+export const registrarPrecioBaseProducto = async (req: Request, res: Response): Promise<void> => {
+  const { sku } = req.params;
+  const { precio } = req.body;
+  await productoService.registrarPrecioBaseProducto(sku, precio);
+  res.status(201).send('Precio registrado');
 };

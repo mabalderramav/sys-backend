@@ -16,4 +16,8 @@ export class ProductoService {
   async obtenerProductoPorSku(sku: string): Promise<Producto | null> {
     return await this.productoRepository.obtenerProductoPorSku(sku);
   }
+
+  async registrarPrecioBaseProducto(sku: string, precio: number): Promise<void> {
+    await this.productoRepository.registrarPrecioBaseProducto(sku, precio);
+  }
 }

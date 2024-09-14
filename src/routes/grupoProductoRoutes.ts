@@ -5,6 +5,6 @@ import { registrarGrupoProducto } from '../controllers/grupoProductoController';
 
 const router = Router();
 
-router.post('/grupo-producto', registrarGrupoProducto);
+router.post('/', registrarGrupoProducto);
 
 export default router;

@@ -2,10 +2,6 @@ export interface UnidadMedida {
   unidad: string;
 }
 
-export interface PrecioLista {
-  precioLista: number;
-}
-
 export interface CodigoBarra {
   codigoBarra: string;
 }
