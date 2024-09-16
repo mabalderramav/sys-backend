@@ -14,4 +14,11 @@ export class GrupoProductoRepository implements IGrupoProductoRepository {
     const productoArray = Object.values(grupoProducto);
     return await this.entidadContext.executeStrategy(productoArray);
   }
+
+  async obtenerGrupoProductos(): Promise<GrupoProducto[]> {
+    const action = 'obtener';
+    this.entidadContext.setStrategy(new GrupoProductoStrategy(action));
+    const result = await this.entidadContext.executeStrategy([]);
+    return result;
+  }
 }

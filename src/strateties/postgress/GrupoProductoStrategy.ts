@@ -39,8 +39,7 @@ export class GrupoProductoStrategy implements IEntidadStrategy {
   private obtenerGrupoProductoStrategyQuery(): string {
     const query = `
       SELECT * 
-      FROM grupos_productos 
-      WHERE cod_grupo_producto = $1
+      FROM grupos_productos
     `;
     return query;
   }

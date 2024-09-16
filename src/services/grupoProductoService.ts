@@ -13,4 +13,8 @@ export class GrupoProductoService {
     const grupoProducto = new GrupoProducto(data);
     return await this.grupoProductoRepository.registrarGrupoProducto(grupoProducto);
   }
+
+  async obtenerGrupoProductos(): Promise<IGrupoProducto[]> {
+    return await this.grupoProductoRepository.obtenerGrupoProductos();
+  }
 }

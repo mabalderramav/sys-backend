@@ -26,3 +26,8 @@ export const registrarGrupoProducto = async (req: Request, res: Response): Promi
     });
   }
 };
+
+export const obtenerGrupos = async (req: Request, res: Response): Promise<void> => {
+  const result = await grupoProductoService.obtenerGrupoProductos();
+  res.status(200).json(result);
+};

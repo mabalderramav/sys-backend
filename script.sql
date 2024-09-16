@@ -9,7 +9,6 @@ CREATE TABLE proveedores (
   nombre_proveedor VARCHAR(100) NOT NULL
 );
 CREATE TABLE grupos_productos (
-  id SERIAL PRIMARY KEY,
   cod_grupo_producto VARCHAR(50) PRIMARY KEY,
   nombre_grupo_producto VARCHAR(100) NOT NULL
 );
