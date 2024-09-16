@@ -1,25 +1,15 @@
 import express from 'express';
-const winston = require('winston');
-const expressWinston = require('express-winston');
+import { logger } from './utils/logger';
 import routes from './routes/index';
 
 const app = express();
-const PORT = 3000;
+const PORT = 3050;
 
 var cors = require('cors');
 app.use(cors());
 app.use(express.json());
 
-app.use(
-  expressWinston.logger({
-    transports: [new winston.transports.Console()],
-    format: winston.format.combine(winston.format.colorize(), winston.format.simple()),
-    meta: false,
-    msg: '{{req.method}} {{req.url}} {{res.statusCode}} {{res.responseTime}}ms  PARAMS:{{JSON.stringify(req.params)}} BODY:{{JSON.stringify(req.body)}}}',
-    expressFormat: false,
-    colorize: true,
-  })
-);
+app.use(logger());
 
 app.use('/v1', routes);
 

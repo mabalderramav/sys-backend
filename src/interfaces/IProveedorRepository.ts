@@ -1,5 +1,5 @@
-import { Proveedor } from '../models/proveedor';
+import { IProveedor } from '../models/proveedor';
 
 export interface IProveedorRepository {
-  registrarProveedorProducto(proveedor: Proveedor): Promise<void>;
+  registrarProveedorProducto(proveedor: IProveedor): Promise<void>;
 }

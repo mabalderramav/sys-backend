@@ -1,5 +1,5 @@
-import { GrupoProducto } from '../models/grupoProducto';
+import { IGrupoProducto } from '../models/grupoProducto';
 
 export interface IGrupoProductoRepository {
-  registrarGrupoProducto(grupoProducto: GrupoProducto): Promise<void>;
+  registrarGrupoProducto(grupoProducto: IGrupoProducto): Promise<void>;
 }

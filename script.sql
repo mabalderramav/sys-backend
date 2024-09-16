@@ -30,17 +30,33 @@ CREATE TABLE productos (
   precio_lista DECIMAL(12, 2) NOT NULL,
   cod_barra VARCHAR(50),
   sku_alternante VARCHAR(50),
-   FOREIGN KEY (cod_grupo_producto) REFERENCES grupos_productos(cod_grupo_producto),
+  FOREIGN KEY (cod_grupo_producto) REFERENCES grupos_productos(cod_grupo_producto),
   FOREIGN KEY (id_fabricante) REFERENCES fabricantes(id),
   FOREIGN KEY (id_proveedor) REFERENCES proveedores(id),
   FOREIGN KEY (id_unidad_medida) REFERENCES unidades_medida(id)
 );
+CREATE TABLE almacenes (
+  id SERIAL PRIMARY KEY,
+  nombre VARCHAR(255) NOT NULL,
+  direccion VARCHAR(255),
+  ciudad VARCHAR(100),
+  estado VARCHAR(100)
+);
+CREATE TABLE inventario (
+  producto_sku VARCHAR(50) PRIMARY KEY NOT NULL,
+  almacen_id INT NOT NULL,
+  minimo DECIMAL(10, 2) NOT NULL,
+  maximo DECIMAL(10, 2) NOT NULL,
+  FOREIGN KEY (producto_sku) REFERENCES productos(sku),
+  FOREIGN KEY (almacen_id) REFERENCES almacenes(id)
+);
+
 
 INSERT INTO fabricantes(sku_fabricante, nombre_fabricante) VALUES('F-SY-JP', 'Industria SONY');
 INSERT INTO proveedores(sku_proveedor, nombre_proveedor) VALUES('P-SN', 'SN');
 INSERT INTO grupos_productos(cod_grupo_producto, nombre_grupo_producto) VALUES('GRP-001', 'Electrodomesticos');
 INSERT INTO unidades_medida(unidad) VALUES('Unidad');
-
+INSERT INTO almacenes(nombre) VALUES('Almacen principal');
 
 DROP TABLE productos;
 DROP TABLE fabricantes;

@@ -17,7 +17,6 @@ Cada clase debe tener una única responsabilidad o razón para cambiar, lo que s
 │ ├── services/ 
 │ │ ├── grupoProductoService.ts
 │ │ ├── inventarioService.ts
-│ │ ├── precioService.ts
 │ │ ├── productoService.ts
 │ │ ├── proveedorService.ts
 ```
@@ -55,24 +54,24 @@ export class ProductoStrategy implements IEntidadStrategy {
     const getQuery = {
       crear: this.crearProductoQuery(),
       obtener: this.obtenerProductoQuery(),
+      'crear-precio': this.registrarPrecioProductoQuery(),
     };
 
     const query = getQuery[this.action] || 'Acción no soportada';
 
     const result = await pool.query(query, params);
-    return result;
+    if (result?.rows.length > 0) {
+      return result.rows;
+    }
+    return [];
   }
 
   private crearProductoQuery(): string {
     const query = `
       INSERT INTO productos (sku, nombre, nombre_extranjero, cod_grupo_producto, id_fabricante, id_proveedor, peso, id_unidad_medida, precio_lista, cod_barra, sku_alternante)
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+      RETURNING *
     `;
-    return query;
-  }
-
-  private obtenerProductoQuery(): string {
-    const query = 'SELECT * FROM productos WHERE sku = $1';
     return query;
   }
 }
@@ -110,15 +109,6 @@ export class ProductoRepositoryPostgres implements IProductoRepository {
     const productoArray = Object.values(producto);
     await this.productoContext.executeStrategy(productoArray);
   }
-
-  async obtenerProductoPorSku(sku: string): Promise<Producto | null> {
-    this.productoContext.setStrategy(new ProductoStrategy('obtener'));
-    const result = await this.productoContext.executeStrategy([sku]);
-    if (result?.rows.length > 0) {
-      return result.rows[0];
-    }
-    return null;
-  }
 }
 ```
 
@@ -141,8 +131,7 @@ Los clientes no deberían estar obligados a depender de interfaces que no utiliz
 ├── src/ 
 │ ├── interfaces/ 
 │ │ ├── IGrupoProductoService.ts
-│ │ ├── IInventarioService.ts
-│ │ ├── IPrecioService.ts
+│ │ ├── IInventarioRepository.ts
 │ │ ├── IProductoRepository.ts
 │ │ ├── IProveedorService.ts
 ```
@@ -187,10 +176,11 @@ export class ProductoService {
 ```
 - En el controlador, instanciamos el repositorio que se va usar y se lo inyectamos en el servicio
 ```typescript
-import { ProductoRepositoryPostgres } from '../repositories/ProductoRepositoryPostgres';
+import { ProductoRepository } from '../repositories/postgress/ProductoRepository';
+// import { ProductoRepository } from '../repositories/mongodb/ProductoRepository';
 
 // Instanciamos el repositorio
-const productoRepository = new ProductoRepositoryPostgres();
+const productoRepository = new ProductoRepository();
 
 // Inyectar el repositorio en el servicio
 const productoService = new ProductoService(productoRepository);

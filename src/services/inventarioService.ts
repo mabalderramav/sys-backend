@@ -1,10 +1,16 @@
 // src/services/inventarioService.ts
 
-import pool from '../database';
-import { IInventarioService } from '../interfaces/IInventarioService';
+import { IInventarioRepository } from '../interfaces/IInventarioRepository';
+import { IInventario, Inventario } from '../models/inventario';
 
-export class InventarioService implements IInventarioService {
-  async registrarMinimoMaximoMRPAlmacen(sku: string, minimo: number, maximo: number): Promise<void> {
-    await pool.query(`INSERT INTO inventario (sku, minimo, maximo) VALUES ($1, $2, $3)`, [sku, minimo, maximo]);
+export class InventarioService {
+  private inventarioRepository: IInventarioRepository;
+
+  constructor(inventarioRepository: IInventarioRepository) {
+    this.inventarioRepository = inventarioRepository;
+  }
+  async registrarMinimoMaximoMRPAlmacen(data: IInventario): Promise<void> {
+    const inventario = new Inventario(data);
+    return await this.inventarioRepository.registrarMinimoMaximoMRPAlmacen(inventario);
   }
 }

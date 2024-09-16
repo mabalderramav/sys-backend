@@ -1,6 +1,6 @@
 // src/services/grupoProductoService.ts
 import { IGrupoProductoRepository } from '../interfaces/IGrupoProductoRepository';
-import { GrupoProducto } from '../models/grupoProducto';
+import { IGrupoProducto, GrupoProducto } from '../models/grupoProducto';
 
 export class GrupoProductoService {
   private grupoProductoRepository: IGrupoProductoRepository;
@@ -9,7 +9,8 @@ export class GrupoProductoService {
     this.grupoProductoRepository = grupoProductoRepository;
   }
 
-  async registrarGrupoProducto(grupoProducto: GrupoProducto): Promise<void> {
-    await this.grupoProductoRepository.registrarGrupoProducto(grupoProducto);
+  async registrarGrupoProducto(data: IGrupoProducto): Promise<void> {
+    const grupoProducto = new GrupoProducto(data);
+    return await this.grupoProductoRepository.registrarGrupoProducto(grupoProducto);
   }
 }

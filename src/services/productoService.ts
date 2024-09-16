@@ -1,6 +1,6 @@
 // src/services/ProductoService.ts
 import { IProductoRepository } from '../interfaces/IProductoRepository';
-import { Producto } from '../models/producto';
+import { IProducto, Producto } from '../models/producto';
 
 export class ProductoService {
   private productoRepository: IProductoRepository;
@@ -9,8 +9,9 @@ export class ProductoService {
     this.productoRepository = productoRepository;
   }
 
-  async registrarProducto(producto: Producto): Promise<void> {
-    await this.productoRepository.registrarProducto(producto);
+  async registrarProducto(data: IProducto): Promise<void> {
+    const producto = new Producto(data);
+    return await this.productoRepository.registrarProducto(producto);
   }
 
   async obtenerProductoPorSku(sku: string): Promise<Producto | null> {
@@ -18,6 +19,6 @@ export class ProductoService {
   }
 
   async registrarPrecioBaseProducto(sku: string, precio: number): Promise<void> {
-    await this.productoRepository.registrarPrecioBaseProducto(sku, precio);
+    return await this.productoRepository.registrarPrecioBaseProducto(sku, precio);
   }
 }

@@ -1,7 +1,7 @@
-import { Producto } from '../models/producto';
+import { IProducto } from '../models/producto';
 
 export interface IProductoRepository {
-  registrarProducto(producto: Producto): Promise<void>;
-  obtenerProductoPorSku(sku: string): Promise<Producto | null>;
+  registrarProducto(producto: IProducto): Promise<void>;
+  obtenerProductoPorSku(sku: string): Promise<IProducto | null>;
   registrarPrecioBaseProducto(sku: string, precio: number): Promise<void>;
 }

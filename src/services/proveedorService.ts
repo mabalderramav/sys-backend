@@ -1,6 +1,6 @@
 // src/services/proveedorService.ts
 import { IProveedorRepository } from '../interfaces/IProveedorRepository';
-import { Proveedor } from '../models/proveedor';
+import { IProveedor, Proveedor } from '../models/proveedor';
 
 export class ProveedorService {
   private proveedorRepository: IProveedorRepository;
@@ -9,7 +9,8 @@ export class ProveedorService {
     this.proveedorRepository = proveedorRepository;
   }
 
-  async registrarProveedorProducto(proveedor: Proveedor): Promise<void> {
-    await this.proveedorRepository.registrarProveedorProducto(proveedor);
+  async registrarProveedorProducto(data: IProveedor): Promise<void> {
+    const proveedor = new Proveedor(data);
+    return await this.proveedorRepository.registrarProveedorProducto(proveedor);
   }
 }

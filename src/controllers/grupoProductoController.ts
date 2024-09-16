@@ -12,9 +12,17 @@ const grupoProductoRepository = new GrupoProductoRepository();
 const grupoProductoService = new GrupoProductoService(grupoProductoRepository);
 
 export const registrarGrupoProducto = async (req: Request, res: Response): Promise<void> => {
-  const grupoProducto: GrupoProducto = req.body;
-
-  await grupoProductoService.registrarGrupoProducto(grupoProducto);
-
-  res.status(201).send('Grupo de producto registrado');
+  try {
+    const grupoProducto: GrupoProducto = req.body;
+    const result = await grupoProductoService.registrarGrupoProducto(grupoProducto);
+    res.status(200).json({
+      error: '',
+      data: result,
+    });
+  } catch (error) {
+    res.status(200).json({
+      error: error,
+      data: [],
+    });
+  }
 };

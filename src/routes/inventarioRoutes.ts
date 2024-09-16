@@ -5,6 +5,6 @@ import { registrarMinimoMaximoMRPAlmacen } from '../controllers/inventarioContro
 
 const router = Router();
 
-router.post('/inventario', registrarMinimoMaximoMRPAlmacen);
+router.post('/', registrarMinimoMaximoMRPAlmacen);
 
 export default router;
