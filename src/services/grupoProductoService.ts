@@ -12,4 +12,8 @@ export class GrupoProductoService {
   async registrarGrupoProducto(grupoProducto: GrupoProducto): Promise<void> {
     await this.grupoProductoRepository.registrarGrupoProducto(grupoProducto);
   }
+
+  async obtenerGrupoProductos(): Promise<void> {
+    await this.grupoProductoRepository.obtenerGrupoProductos();
+  }
 }

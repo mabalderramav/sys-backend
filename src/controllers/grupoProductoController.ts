@@ -18,3 +18,8 @@ export const registrarGrupoProducto = async (req: Request, res: Response): Promi
 
   res.status(201).send('Grupo de producto registrado');
 };
+
+export const obtenerGrupos = async (req: Request, res: Response): Promise<void> => {
+  const result = await grupoProductoService.obtenerGrupoProductos();
+  res.status(200).json(result);
+};

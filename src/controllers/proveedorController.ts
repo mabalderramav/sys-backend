@@ -2,7 +2,7 @@
 import { Request, Response } from 'express';
 import { ProveedorService } from '../services/proveedorService';
 import { Proveedor } from '../models/proveedor';
-import { ProveedorRepository } from '../repositories/postgress/proveedorRepository';
+import { ProveedorRepository } from '../repositories/postgress/ProveedorRepository';
 // import { ProveedorRepository } from '../repositories/mongodb/proveedorRepository';
 
 // Instanciamos el repositorio
