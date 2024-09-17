@@ -1,8 +1,8 @@
 import { IEntidadStrategy } from '../IEntidadStrategy';
 import pool from '../../config/poolPostgress';
 
-export class ProveedorStrategy implements IEntidadStrategy {
-  private action: 'crear' | 'obtener';
+export class UnidadMedidaStrategy implements IEntidadStrategy {
+  private action: 'obtener';
 
   constructor(action: any) {
     this.action = action;
@@ -10,8 +10,7 @@ export class ProveedorStrategy implements IEntidadStrategy {
 
   async execute(params: any[]): Promise<any> {
     const getQuery = {
-      crear: this.crearProveedorQuery(),
-      obtener: this.obtenerProveedoresQuery(),
+      obtener: this.obtenerUnidadesMedidaQuery(),
     };
 
     const query = getQuery[this.action] || 'Acción no soportada';
@@ -23,19 +22,10 @@ export class ProveedorStrategy implements IEntidadStrategy {
     return [];
   }
 
-  private crearProveedorQuery(): string {
-    const query = `
-      INSERT INTO proveedores (sku_proveedor, nombre_proveedor)
-      VALUES ($1, $2)
-      RETURNING *
-    `;
-    return query;
-  }
-
-  private obtenerProveedoresQuery(): string {
+  private obtenerUnidadesMedidaQuery(): string {
     const query = `
       SELECT * 
-      FROM proveedores
+      FROM unidades_medida
       ORDER BY id asc
     `;
     return query;

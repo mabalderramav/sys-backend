@@ -13,4 +13,8 @@ export class ProveedorService {
     const proveedor = new Proveedor(data);
     return await this.proveedorRepository.registrarProveedorProducto(proveedor);
   }
+
+  async obtenerProveedores(): Promise<IProveedor[]> {
+    return await this.proveedorRepository.obtenerProveedores();
+  }
 }

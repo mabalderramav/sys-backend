@@ -13,4 +13,11 @@ export class ProveedorRepository implements IProveedorRepository {
     const proveedorArray = Object.values(proveedor);
     return await this.entidadContext.executeStrategy(proveedorArray);
   }
+
+  async obtenerProveedores(): Promise<IProveedor[]> {
+    const action = 'obtener';
+    this.entidadContext.setStrategy(new ProveedorStrategy(action));
+    const result = await this.entidadContext.executeStrategy([]);
+    return result;
+  }
 }
