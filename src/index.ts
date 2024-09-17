@@ -3,7 +3,7 @@ import { logger } from './utils/logger';
 import routes from './routes/index';
 
 const app = express();
-const PORT = 3050;
+const PORT = process.env.PORT || 5000;
 
 var cors = require('cors');
 app.use(cors());
