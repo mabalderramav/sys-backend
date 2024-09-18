@@ -27,6 +27,21 @@ export const registrarProducto = async (req: Request, res: Response): Promise<vo
   }
 };
 
+export const obtenerProductos = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const result = await productoService.obtenerProductos();
+    res.status(200).json({
+      error: '',
+      data: result,
+    });
+  } catch (error) {
+    res.status(200).json({
+      error: error,
+      data: [],
+    });
+  }
+};
+
 export const obtenerProductoPorSku = async (req: Request, res: Response): Promise<void> => {
   try {
     const { sku } = req.params;

@@ -14,6 +14,10 @@ export class ProductoService {
     return await this.productoRepository.registrarProducto(producto);
   }
 
+  async obtenerProductos(): Promise<IProducto[]> {
+    return await this.productoRepository.obtenerProductos();
+  }
+
   async obtenerProductoPorSku(sku: string): Promise<Producto | null> {
     return await this.productoRepository.obtenerProductoPorSku(sku);
   }

@@ -12,6 +12,7 @@ export class ProductoStrategy implements IEntidadStrategy {
     const getQuery = {
       crear: this.crearProductoQuery(),
       obtener: this.obtenerProductoQuery(),
+      'obtener-todo': this.obtenerProductosQuery(),
       'crear-precio': this.registrarPrecioProductoQuery(),
     };
 
@@ -38,6 +39,15 @@ export class ProductoStrategy implements IEntidadStrategy {
       SELECT * 
       FROM productos 
       WHERE sku = $1
+    `;
+    return query;
+  }
+
+  private obtenerProductosQuery(): string {
+    const query = `
+      SELECT * 
+      FROM productos
+      ORDER BY id desc
     `;
     return query;
   }

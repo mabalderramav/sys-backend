@@ -16,6 +16,13 @@ export class ProductoRepository implements IProductoRepository {
     return result[0];
   }
 
+  async obtenerProductos(): Promise<IProducto[]> {
+    const action = 'obtener-todo';
+    this.entidadContext.setStrategy(new ProductoStrategy(action));
+    const result = await this.entidadContext.executeStrategy([]);
+    return result;
+  }
+
   async obtenerProductoPorSku(sku: string): Promise<IProducto | null> {
     const action = 'obtener';
     this.entidadContext.setStrategy(new ProductoStrategy(action));
