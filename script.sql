@@ -96,7 +96,9 @@ CREATE TABLE detalle_venta (
 INSERT INTO fabricantes(sku_fabricante, nombre_fabricante) VALUES('F-SY-JP', 'Industria SONY');
 INSERT INTO proveedores(sku_proveedor, nombre_proveedor) VALUES('P-SN', 'SN');
 INSERT INTO grupos_productos(cod_grupo_producto, nombre_grupo_producto) VALUES('GRP-001', 'Electrodomesticos');
+INSERT INTO grupos_productos(cod_grupo_producto, nombre_grupo_producto) VALUES('GRP-002', 'Computadoras');
 INSERT INTO unidades_medida(unidad) VALUES('Unidad');
+INSERT INTO almacenes(nombre) VALUES('Servicio tecnico');
 INSERT INTO almacenes(nombre) VALUES('Almacen principal');
 
 INSERT INTO grupo_clientes(nombre_grupo_cliente, porcentaje_descuento) VALUES('General', 0);
@@ -105,6 +107,14 @@ INSERT INTO grupo_clientes(nombre_grupo_cliente, porcentaje_descuento) VALUES('V
 INSERT INTO cliente(nombre_cliente, grupo_cliente_id) VALUES('Antonio Suarez', 1);
 INSERT INTO cliente(nombre_cliente, grupo_cliente_id) VALUES('Maria Paz', 2);
 INSERT INTO cliente(nombre_cliente, grupo_cliente_id) VALUES('Mario Perez', 2);
+
+INSERT INTO productos(sku, nombre, cod_grupo_producto, id_fabricante, id_proveedor, peso, id_unidad_medida, precio_lista, es_servicio) 
+VALUES('CPHPRG','Computadora Portatil HP 15-EF2522la, R3-5300U(8GB, 256GB, 15.6" HD FREEDOS) GREY', 'GRP-002', 1,1,2,1,1200,FALSE);
+INSERT INTO productos(sku, nombre, cod_grupo_producto, id_fabricante, id_proveedor, peso, id_unidad_medida, precio_lista, es_servicio) 
+VALUES('CPASI3B','Computadora Portátil ASUS Core i3 15,6" (8+ 512GB) SSD color Negro', 'GRP-002', 1,1,2,1,1200,FALSE);
+INSERT INTO productos(nombre, precio_lista, es_servicio) 
+VALUES('Mantenimiento de computadora', 100,TRUE);
+
 
 
 DROP TABLE inventario;

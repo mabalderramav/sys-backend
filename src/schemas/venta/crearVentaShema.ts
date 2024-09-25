@@ -2,10 +2,7 @@ import { z } from 'zod';
 
 export const crearVentaRequestBodySchema = z.object({
   cliente: z.object({
-    codigo_cliente: z
-      .string()
-      .min(1, 'El código de cliente es requerido')
-      .regex(/^[A-Z0-9]{2,10}$/, 'Solo puede ser letra o numero'),
+    id_cliente: z.number().min(1, 'El código de cliente es requerido'),
     nombre_cliente: z.string().min(1, 'El nombre de cliente es requerido'),
     grupo_cliente: z.string().min(1, 'El grupo de cliente es requerido'),
   }),
@@ -17,12 +14,12 @@ export const crearVentaRequestBodySchema = z.object({
     items: z
       .array(
         z.object({
-          codigo_producto: z.string().min(1, 'Reqierido'),
-          nombre_producto: z.string(),
+          id_producto: z.number().min(1, 'Reqierido'),
+          sku: z.string(),
           cantidad: z.number().min(1, 'La cantidad debe ser al menos 1').nonnegative(),
           precio_unitario: z.number().min(0, 'El precio debe ser mayor o igual a 0'),
           porcentaje_descuento_item: z.number().min(0, 'El descuento no puede ser negativo'),
-          almacen: z.string(),
+          id_almacen: z.number().min(1, 'Reqierido'),
         })
       )
       .min(1, 'Debe haber al menos un item'),
