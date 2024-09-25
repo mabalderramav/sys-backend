@@ -2,29 +2,23 @@
 import { Request, Response } from 'express';
 import { NotFountException } from '../config/exceptions/not-fount-exceptions';
 import { BadRequestExceptions } from '../config/exceptions/bad-request-exceptions';
+import { VentaService } from '../services/ventaService';
 
 // Instanciamos el repositorio
+const ventaService = new VentaService();
 
 export const crearVenta = async (req: Request, res: Response): Promise<void> => {
   try {
-    req.body;
-    res.status(200).json({
-      message: {},
-    });
+    const ventaDto = req.body;
+    ventaService.registrarVenta(ventaDto);
+    res.statusCode = 200;
   } catch (error) {
     if (error instanceof NotFountException) {
-      res.status(404).json({
-        error: error,
-      });
+      res.statusCode = 404;
     } else if (error instanceof BadRequestExceptions) {
-      res.status(400).json({
-        error: error,
-        message: error.message,
-      });
+      res.statusCode = 400;
     } else {
-      res.status(500).json({
-        message: 'Error en el servidor',
-      });
+      res.statusCode = 500;
     }
   }
 };
