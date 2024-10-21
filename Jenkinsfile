@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // Define la versión de Node.js a usar (asegúrate de que esta versión esté configurada en Jenkins)
-        NODEJS_VERSION = 'NodeJS 20'  // Cambia este valor al nombre que configuraste en "Global Tool Configuration"
+        NODEJS_VERSION = 'NodeJS 20.12.2'  // Cambia este valor al nombre que configuraste en "Global Tool Configuration"
         // Agrega la variable de entorno para la cadena de conexión
         CONNECTION_STRING = 'postgresql://postgres.faggntrzkifpwlwsuumd:58@G_ZHj6Z8i_7-@aws-0-us-west-1.pooler.supabase.com:6543/postgres'
     }
@@ -38,7 +38,7 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                // Ejecuta la aplicación en el puerto 3000 (asegúrate de que el script "start" esté definido en package.json)
+                // Ejecuta la aplicación en el puerto 3050 (asegúrate de que el script "start" esté definido en package.json)
                 sh 'PORT=3050 npm start &'
             }
         }
