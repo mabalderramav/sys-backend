@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         CONNECTION_STRING = 'postgresql://postgres.faggntrzkifpwlwsuumd:58@G_ZHj6Z8i_7-@aws-0-us-west-1.pooler.supabase.com:6543/postgres'
-        PORT = '3050'  // Define el puerto en el que la aplicación debe correr
+        PORT = '3050'
     }
 
     stages {
@@ -36,12 +36,11 @@ pipeline {
             steps {
                 script {
                     try {
-                        bat 'pm2 delete my-app || echo "No previous app instance running"'
+                        bat 'pm2 delete sys-backend || echo "No previous app instance running"'
                     } catch (Exception e) {
                         echo 'No previous app instance running'
                     }
-                    // Ejecuta el proyecto utilizando la variable de entorno PORT
-                    bat 'pm2 start dist/index.js --name "my-app" --watch -- -p %PORT%'
+                    bat 'pm2 start dist/index.js --name "sys-backend" --watch -- -p %PORT%'
                     bat 'pm2 save'
                 }
             }
