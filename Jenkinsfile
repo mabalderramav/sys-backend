@@ -2,8 +2,7 @@ pipeline {
     agent any
 
     environment {
-        // Define la versión de Node.js a usar
-        NODEJS_VERSION = 'node'
+        NODEJS_VERSION = 'node'  // Asegúrate de que coincida exactamente con el nombre configurado
         CONNECTION_STRING = 'postgresql://postgres.faggntrzkifpwlwsuumd:58@G_ZHj6Z8i_7-@aws-0-us-west-1.pooler.supabase.com:6543/postgres'
     }
 
@@ -17,7 +16,6 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                // Usa la versión de Node.js configurada
                 script {
                     def nodeHome = tool name: "${NODEJS_VERSION}", type: 'NodeJS'
                     env.PATH = "${nodeHome}/bin:${env.PATH}"
@@ -45,7 +43,6 @@ pipeline {
 
     post {
         always {
-            // Limpiar el workspace después de la ejecución
             cleanWs()
         }
     }
