@@ -44,7 +44,8 @@ pipeline {
 
     post {
         always {
-            cleanWs()
+            // Mensaje para indicar que no se realiza la limpieza del workspace
+            echo 'Skipping workspace cleanup because the application is running with pm2.'
         }
     }
 }
