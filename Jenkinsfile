@@ -14,22 +14,30 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                // Instala las dependencias con npm
+                // Instala las dependencias del proyecto con npm
                 bat 'npm install'
+            }
+        }
+
+        stage('Install PM2') {
+            steps {
+                // Instala pm2 globalmente
+                bat 'npm install -g pm2'
             }
         }
 
         stage('Run Tests') {
             steps {
-                // Ejecuta los tests con npm
+                // Ejecuta los tests del proyecto
                 bat 'npm test'
             }
         }
 
         stage('Deploy') {
             steps {
-                // Ejecuta la aplicación en segundo plano en el puerto 3050 usando 'start' para Windows
-                bat 'start /B cmd /C "set PORT=3050 && npm start"'
+                // Ejecuta la aplicación en segundo plano usando pm2
+                bat 'pm2 start npm --name "my-app" -- run start'
+                bat 'pm2 save'
             }
         }
     }
