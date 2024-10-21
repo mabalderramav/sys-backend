@@ -40,7 +40,8 @@ pipeline {
                     } catch (Exception e) {
                         echo 'No previous app instance running'
                     }
-                    bat 'pm2 start dist/index.js --name "my-app" --watch -- --port 3035'
+                    // Ejecuta el proyecto utilizando la variable de entorno PORT
+                    bat 'pm2 start dist/index.js --name "my-app" --watch -- -p %PORT%'
                     bat 'pm2 save'
                 }
             }
