@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // Define la versión de Node.js a usar
-        NODEJS_VERSION = 'NodeJS 20.12.2'
+        NODEJS_VERSION = 'NodeJS 20'
         CONNECTION_STRING = 'postgresql://postgres.faggntrzkifpwlwsuumd:58@G_ZHj6Z8i_7-@aws-0-us-west-1.pooler.supabase.com:6543/postgres'
     }
 
