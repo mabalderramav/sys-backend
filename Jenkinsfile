@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         CONNECTION_STRING = 'postgresql://postgres.faggntrzkifpwlwsuumd:58@G_ZHj6Z8i_7-@aws-0-us-west-1.pooler.supabase.com:6543/postgres'
-        PORT = '3050'  // Asegúrate de que el puerto esté configurado
+        PORT = '3050'  // Define el puerto en el que la aplicación debe correr
     }
 
     stages {
@@ -15,38 +15,38 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                // Instala las dependencias del proyecto con npm
                 bat 'npm install'
             }
         }
 
         stage('Install PM2') {
             steps {
-                // Instala pm2 globalmente
                 bat 'npm install -g pm2'
             }
         }
 
         stage('Run Tests') {
             steps {
-                // Ejecuta los tests del proyecto
                 bat 'npm test'
             }
         }
 
         stage('Deploy') {
             steps {
-                // Detén cualquier instancia previa de la aplicación con pm2
+                // Intenta detener cualquier instancia anterior
                 bat 'pm2 delete my-app || echo "No previous app instance running"'
-                
-                // Ejecuta la aplicación en segundo plano usando pm2
+
+                // Inicia la aplicación utilizando pm2
                 bat 'pm2 start npm --name "my-app" -- run start'
 
-                // Guarda la configuración de pm2 para reinicios futuros
+                // Guarda la configuración actual de PM2
                 bat 'pm2 save'
 
-                // Muestra el estado de pm2 para verificar si la aplicación está corriendo
+                // Muestra la lista de procesos de PM2 para verificar que la aplicación esté corriendo
                 bat 'pm2 list'
+
+                // Verifica si la aplicación está corriendo en el puerto esperado
+                bat 'netstat -an | findstr :3050 || echo "No application is listening on port 3050"'
             }
         }
     }
