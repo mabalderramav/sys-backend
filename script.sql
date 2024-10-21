@@ -1,128 +1,36 @@
-CREATE TABLE grupo_clientes (
+CREATE TABLE clientes (
   id SERIAL PRIMARY KEY,
-  nombre_grupo_cliente VARCHAR(50) UNIQUE NOT NULL,
-  porcentaje_descuento NUMERIC(5, 2) DEFAULT 0
+  code VARCHAR(50) UNIQUE,
+  name VARCHAR(100),
+  ciNit VARCHAR(20),
+  documentType VARCHAR(5),
+  email VARCHAR(100)
 );
-CREATE TABLE cliente (
+CREATE TABLE products (
+  id SERIAL PRIMARY KEY,
+  code VARCHAR(50) UNIQUE,
+  name VARCHAR(100),
+  price decimal(10,2)
+);
+
+insert  into  products (code, name,price) values ('1', 'leche', 5);
+insert  into  products (code, name,price) values ('2', 'queso', 7);
+insert  into  products (code, name,price) values ('3', 'mantequilla', 15);
+
+CREATE TABLE sales (
     id SERIAL PRIMARY KEY,
-    nombre_cliente VARCHAR(100) NOT NULL,
-    grupo_cliente_id INT NOT NULL,
-    FOREIGN KEY (grupo_cliente_id) REFERENCES grupo_clientes(id)
-);
-CREATE TABLE fabricantes (
-  id SERIAL PRIMARY KEY,
-  sku_fabricante VARCHAR(50) UNIQUE NOT NULL,
-  nombre_fabricante VARCHAR(100) NOT NULL
-);
-CREATE TABLE proveedores (
-  id SERIAL PRIMARY KEY,
-  sku_proveedor VARCHAR(50) UNIQUE NOT NULL,
-  nombre_proveedor VARCHAR(100) NOT NULL
-);
-CREATE TABLE grupos_productos (
-  cod_grupo_producto VARCHAR(50) PRIMARY KEY,
-  nombre_grupo_producto VARCHAR(100) NOT NULL
-);
-CREATE TABLE unidades_medida (
-  id SERIAL PRIMARY KEY,
-  unidad VARCHAR(20) NOT NULL
-);
-CREATE TABLE productos (
-  id SERIAL PRIMARY KEY,
-  sku VARCHAR(50) UNIQUE,
-  nombre VARCHAR(100) NOT NULL,
-  nombre_extranjero VARCHAR(100),
-  cod_grupo_producto VARCHAR(50),
-  id_fabricante INT,
-  id_proveedor INT,
-  peso DECIMAL(10, 2),
-  id_unidad_medida INT,
-  precio_lista DECIMAL(12, 2) NOT NULL,
-  cod_barra VARCHAR(50),
-  sku_alternante VARCHAR(50),
-  es_servicio BOOLEAN NOT NULL,
-  FOREIGN KEY (cod_grupo_producto) REFERENCES grupos_productos(cod_grupo_producto),
-  FOREIGN KEY (id_fabricante) REFERENCES fabricantes(id),
-  FOREIGN KEY (id_proveedor) REFERENCES proveedores(id),
-  FOREIGN KEY (id_unidad_medida) REFERENCES unidades_medida(id)
-);
-CREATE TABLE almacenes (
-  id SERIAL PRIMARY KEY,
-  nombre VARCHAR(255) NOT NULL,
-  direccion VARCHAR(255),
-  ciudad VARCHAR(100),
-  estado VARCHAR(100)
-);
-CREATE TABLE inventario (
-  producto_sku VARCHAR(50) PRIMARY KEY NOT NULL,
-  almacen_id INT NOT NULL,
-  minimo DECIMAL(10, 2) NOT NULL,
-  maximo DECIMAL(10, 2) NOT NULL,
-  FOREIGN KEY (producto_sku) REFERENCES productos(sku),
-  FOREIGN KEY (almacen_id) REFERENCES almacenes(id)
+    client_id serial references clientes(id),
+    total decimal(10,2)
 );
 
-
-CREATE TABLE venta (
-    id_venta SERIAL PRIMARY KEY,
-    id_cliente INT ,
-    fecha TIMESTAMP DEFAULT NOW(),
-    condicion_pago VARCHAR(50) NOT NULL,
-    forma_entrega VARCHAR(50) NOT NULL,
-    total_venta NUMERIC(10, 2) NOT NULL,
-    total_descuento NUMERIC(10, 2) DEFAULT 0,
-    total_impuesto NUMERIC(10, 2) DEFAULT 0,
-    total_con_impuesto NUMERIC(10, 2) DEFAULT 0,
-    FOREIGN KEY (id_cliente) REFERENCES cliente(id)
+create table sales_products
+(
+    sales_id serial,
+    products_id serial,
+    price decimal(10,2),
+    amount int,
+    sub_total decimal(10,2),
+    primary key(sales_id, products_id),
+    CONSTRAINT fk_sales  FOREIGN KEY(sales_id)   REFERENCES sales(id),
+    CONSTRAINT fk_product  FOREIGN KEY(products_id)   REFERENCES products(id)
 );
-
-CREATE TABLE detalle_venta (
-    id_detalle SERIAL PRIMARY KEY,
-    id_venta INT NOT NULL,
-    id_producto INT NOT NULL,
-    id_almacen INT,
-    cantidad INT NOT NULL,
-    precio_unitario NUMERIC(10, 2) NOT NULL,
-    descuento_item NUMERIC(5, 2) DEFAULT 0,
-    --impuesto_item NUMERIC(5, 2) DEFAULT 0,
-    subtotal NUMERIC(10, 2) NOT NULL,
-    FOREIGN KEY (id_venta) REFERENCES venta(id_venta),
-    FOREIGN KEY (id_producto) REFERENCES productos(id),
-    FOREIGN KEY (id_almacen) REFERENCES almacenes(id)
-);
-
-
-
-INSERT INTO fabricantes(sku_fabricante, nombre_fabricante) VALUES('F-SY-JP', 'Industria SONY');
-INSERT INTO proveedores(sku_proveedor, nombre_proveedor) VALUES('P-SN', 'SN');
-INSERT INTO grupos_productos(cod_grupo_producto, nombre_grupo_producto) VALUES('GRP-001', 'Electrodomesticos');
-INSERT INTO grupos_productos(cod_grupo_producto, nombre_grupo_producto) VALUES('GRP-002', 'Computadoras');
-INSERT INTO unidades_medida(unidad) VALUES('Unidad');
-INSERT INTO almacenes(nombre) VALUES('Servicio tecnico');
-INSERT INTO almacenes(nombre) VALUES('Almacen principal');
-
-INSERT INTO grupo_clientes(nombre_grupo_cliente, porcentaje_descuento) VALUES('General', 0);
-INSERT INTO grupo_clientes(nombre_grupo_cliente, porcentaje_descuento) VALUES('VIP', 15);
-
-INSERT INTO cliente(nombre_cliente, grupo_cliente_id) VALUES('Antonio Suarez', 1);
-INSERT INTO cliente(nombre_cliente, grupo_cliente_id) VALUES('Maria Paz', 2);
-INSERT INTO cliente(nombre_cliente, grupo_cliente_id) VALUES('Mario Perez', 2);
-
-INSERT INTO productos(sku, nombre, cod_grupo_producto, id_fabricante, id_proveedor, peso, id_unidad_medida, precio_lista, es_servicio) 
-VALUES('CPHPRG','Computadora Portatil HP 15-EF2522la, R3-5300U(8GB, 256GB, 15.6" HD FREEDOS) GREY', 'GRP-002', 1,1,2,1,1200,FALSE);
-INSERT INTO productos(sku, nombre, cod_grupo_producto, id_fabricante, id_proveedor, peso, id_unidad_medida, precio_lista, es_servicio) 
-VALUES('CPASI3B','Computadora Portátil ASUS Core i3 15,6" (8+ 512GB) SSD color Negro', 'GRP-002', 1,1,2,1,1200,FALSE);
-INSERT INTO productos(nombre, precio_lista, es_servicio) 
-VALUES('Mantenimiento de computadora', 100,TRUE);
-
-
-
-DROP TABLE inventario;
-DROP TABLE productos;
-DROP TABLE fabricantes;
-DROP TABLE proveedores;
-DROP TABLE grupos_productos;
-DROP TABLE unidades_medida;
-DROP TABLE almacenes;
-DROP TABLE factura;
-DROP TABLE detalle_factura;
