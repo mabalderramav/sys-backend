@@ -14,22 +14,22 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                // Usa el Node.js instalado globalmente para instalar dependencias
-                sh 'npm install'
+                // Instala las dependencias con npm
+                bat 'npm install'
             }
         }
 
         stage('Run Tests') {
             steps {
-                // Ejecuta los tests con Node.js instalado globalmente
-                sh 'npm test'
+                // Ejecuta los tests con npm
+                bat 'npm test'
             }
         }
 
         stage('Deploy') {
             steps {
-                // Ejecuta la aplicación en el puerto 3050
-                sh 'PORT=3050 npm start &'
+                // Ejecuta la aplicación en segundo plano en el puerto 3050 usando 'start' para Windows
+                bat 'start /B cmd /C "set PORT=3050 && npm start"'
             }
         }
     }
