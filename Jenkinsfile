@@ -42,7 +42,7 @@ pipeline {
                         echo 'No previous app instance running'
                     }
                     // Inicia la aplicación usando forever y guarda los logs
-                    bat 'forever start -a --minUptime 1000 --spinSleepTime 1000 -l C:/data/jenkins_home/workspace/backend/forever.log -o C:/data/jenkins_home/workspace/backend/out.log -e C:/data/jenkins_home/workspace/backend/err.log dist/index.js -p 3050'
+                    bat 'forever start --uid "sys-backend" -a --minUptime 1000 --spinSleepTime 1000 -l C:/data/jenkins_home/workspace/backend/forever.log -o C:/data/jenkins_home/workspace/backend/out.log -e C:/data/jenkins_home/workspace/backend/err.log dist/index.js -p 3050'
                 }
             }
         }
