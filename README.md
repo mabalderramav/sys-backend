@@ -82,7 +82,7 @@ Para configurar el despliegue automatizado con Jenkins, sigue los pasos a contin
 ## Uso
 Una vez en funcionamiento, la API estará disponible en http://localhost:3050 (o el puerto configurado). A continuación, se encuentran ejemplos de las rutas:
 
-- GET localhost:3050/api/cliente/770641264 : Obtener todos los recursos.
+- GET localhost:3050/api/cliente/770641264 : Obtener datos del cliente por ci.
 
 ## Licencia
 Este proyecto está bajo la licencia MIT. Consulta el archivo LICENSE para más detalles.
