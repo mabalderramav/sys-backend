@@ -18,64 +18,26 @@ pipeline {
                 bat 'npm install'
             }
         }
-        // stage('Install PM2') {
-        //     steps {
-        //         bat 'npm install -g pm2'
-        //     }
-        // }
         stage('Compile TypeScript') {
             steps {
                 bat 'npx tsc'
             }
         }
-        // stage('Deploy with PM2') {
-        //     steps {
-        //         script {
-        //             try {
-        //                 // Detén cualquier instancia anterior de la aplicación
-        //                 bat 'pm2 stop sys-backend || echo "No previous app instance running"'
-        //                 // Elimina la aplicación de la lista de PM2
-        //                 bat 'pm2 delete sys-backend || echo "No previous app instance to delete"'
-        //             } catch (Exception e) {
-        //                 echo 'No previous app instance running or failed to stop'
-        //             }
-        //             // Inicia la aplicación con PM2 en segundo plano
-        //             bat 'pm2 start dist/index.js --name "sys-backend" -- -p %PORT%'
-        //             // Guarda la lista de procesos de PM2 para recuperación automática
-        //             bat 'pm2 save'
-                    
-        //         }
-        //     }
-        // }
-        stage('Deploy with WinSW') {
+        stage('Deploy with PM2') {
             steps {
                 script {
-                    // Ruta a WinSW y al archivo de configuración .xml
-                    def winswPath = 'C:\\tools\\winsw'
-                    def serviceName = 'sys-backend'
-                    def xmlPath = "${winswPath}\\${serviceName}.xml"
                     try {
-                        // Detener el servicio si está corriendo
-                        bat '''
-                            cd C:\\tools\\winsw
-                            WinSW-x64.exe stop || echo "El servicio no estaba corriendo"
-                            WinSW-x64.exe uninstall || echo "El servicio no estaba instalado"
-                        '''
+                        // Detén cualquier instancia anterior de la aplicación
+                        bat 'pm2 stop sys-backend || echo "No previous app instance running"'
+                        // Elimina la aplicación de la lista de PM2
+                        bat 'pm2 delete sys-backend || echo "No previous app instance to delete"'
                     } catch (Exception e) {
                         echo 'No previous app instance running or failed to stop'
                     }
-
-                    // Instalar el servicio usando WinSW-x64
-                    bat '''
-                        cd C:\\tools\\winsw
-                        WinSW-x64.exe install -c C:\\tools\\winsw\\sys-backend.xml
-                    '''
-
-                    // Iniciar el servicio
-                   bat '''
-                        cd C:\\tools\\winsw
-                        WinSW-x64.exe start
-                    '''
+                    // Inicia la aplicación con PM2 en segundo plano
+                    bat 'pm2 start dist/index.js --name "sys-backend" -- -p %PORT%'
+                    // Guarda la lista de procesos de PM2 para recuperación automática
+                    bat 'pm2 save'
                 }
             }
         }
