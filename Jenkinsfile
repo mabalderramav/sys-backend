@@ -4,8 +4,7 @@ pipeline {
     environment {
         CONNECTION_STRING = 'postgresql://postgres.faggntrzkifpwlwsuumd:58@G_ZHj6Z8i_7-@aws-0-us-west-1.pooler.supabase.com:6543/postgres'
         PORT = '3050'
-        HOME = 'C:\\Users\\jenkins'
-        HOMEPATH = '\\Users\\jenkins'
+        PM2_HOME = 'C:\\data\\PM2_HOME\\.pm2'  // Ruta específica para PM2
     }
 
     stages {
@@ -42,8 +41,7 @@ pipeline {
                     } catch (Exception e) {
                         echo 'No previous app instance running'
                     }
-                    // bat 'pm2 start dist/index.js --name "sys-backend" --watch -- -p %PORT%'
-                    bat 'pm2 start dist/index.js --name "sys-backend" --watch -- -p %PORT% --pm2-home "C:\\Users\\jenkins\\.pm2"'
+                    bat 'pm2 start dist/index.js --name "sys-backend" --watch -- -p 3050'
                     bat 'pm2 save'
                 }
             }
