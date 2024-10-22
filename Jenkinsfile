@@ -17,9 +17,9 @@ pipeline {
                 bat 'npm install'
             }
         }
-        stage('Install Forever') {
+        stage('Install PM2') {
             steps {
-                bat 'npm install -g forever'
+                bat 'npm install -g pm2'
             }
         }
         stage('Compile TypeScript') {
@@ -27,29 +27,27 @@ pipeline {
                 bat 'npx tsc'
             }
         }
-        // stage('Run Tests') {
-        //     steps {
-        //         bat 'npm test'
-        //     }
-        // }
-        stage('Deploy') {
+        stage('Deploy with PM2') {
             steps {
                 script {
                     try {
-                        // Intenta detener cualquier instancia anterior de la aplicación
-                        bat 'forever stop dist/index.js || echo "No previous app instance running"'
+                        // Detén cualquier instancia anterior de la aplicación
+                        bat 'pm2 stop sys-backend || echo "No previous app instance running"'
+                        // Elimina la aplicación de la lista de PM2
+                        bat 'pm2 delete sys-backend || echo "No previous app instance to delete"'
                     } catch (Exception e) {
-                        echo 'No previous app instance running'
+                        echo 'No previous app instance running or failed to stop'
                     }
-                    // Inicia la aplicación usando forever y guarda los logs
-                    bat 'forever start --uid "sys-backend" -a --minUptime 1000 --spinSleepTime 1000 -l C:/data/jenkins_home/workspace/backend/forever.log -o C:/data/jenkins_home/workspace/backend/out.log -e C:/data/jenkins_home/workspace/backend/err.log dist/index.js -p 3050'
+                    // Inicia la aplicación con PM2 en segundo plano
+                    bat 'pm2 start dist/index.js --name "sys-backend" --watch -- -p 3050'
+                    // Guarda la lista de procesos de PM2 para recuperación automática
+                    bat 'pm2 save'
                 }
             }
         }
         stage('Verify Application') {
             steps {
                 script {
-                    sleep(time: 10, unit: 'SECONDS')  // Agrega un retraso para dar tiempo a que la aplicación se inicie
                     def output = bat(script: 'netstat -an | findstr 3050', returnStdout: true).trim()
                     if (!output.contains('LISTENING')) {
                         error "La aplicación no está corriendo en el puerto 3050"
@@ -57,24 +55,10 @@ pipeline {
                 }
             }
         }
-        stage('Check Forever Logs') {
-            steps {
-                // Muestra el contenido de los logs para depuración
-                bat 'type forever.log'
-                bat 'type out.log'
-                bat 'type err.log'
-            }
-        }
     }
     post {
         always {
-            echo 'Skipping workspace cleanup because the application is running with forever.'
-            // Muestra los logs de Forever aunque la compilación haya fallado
-            script {
-                bat 'type forever.log'
-                bat 'type out.log'
-                bat 'type err.log'
-            }
+            echo 'Skipping workspace cleanup because the application is running with PM2.'
         }
         failure {
             echo 'El despliegue falló, revisa los logs para más detalles.'
