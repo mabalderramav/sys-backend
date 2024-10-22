@@ -3,8 +3,7 @@ pipeline {
 
     environment {
         CONNECTION_STRING = 'postgresql://postgres.faggntrzkifpwlwsuumd:58@G_ZHj6Z8i_7-@aws-0-us-west-1.pooler.supabase.com:6543/postgres'
-        PORT = '3050'
-        PM2_HOME = 'C:\\data\\PM2_HOME\\.pm2'  // Ruta específica para PM2
+        PORT = '3050'  // Define el puerto en el que la aplicación debe correr
     }
 
     stages {
@@ -18,9 +17,9 @@ pipeline {
                 bat 'npm install'
             }
         }
-        stage('Install PM2') {
+        stage('Install Forever') {
             steps {
-                bat 'npm install -g pm2'
+                bat 'npm install -g forever'
             }
         }
         stage('Compile TypeScript') {
@@ -37,19 +36,20 @@ pipeline {
             steps {
                 script {
                     try {
-                        bat 'pm2 delete sys-backend || echo "No previous app instance running"'
+                        // Intenta detener cualquier instancia anterior de la aplicación
+                        bat 'forever stop dist/index.js || echo "No previous app instance running"'
                     } catch (Exception e) {
                         echo 'No previous app instance running'
                     }
-                    bat 'pm2 start dist/index.js --name "sys-backend" --watch -- -p 3050'
-                    bat 'pm2 save'
+                    // Inicia la aplicación usando forever
+                    bat 'forever start dist/index.js -p 3050'
                 }
             }
         }
     }
     post {
         always {
-            echo 'Skipping workspace cleanup because the application is running with pm2.'
+            echo 'Skipping workspace cleanup because the application is running with forever.'
         }
     }
 }
