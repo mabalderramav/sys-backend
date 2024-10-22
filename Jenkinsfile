@@ -42,7 +42,8 @@ pipeline {
                     } catch (Exception e) {
                         echo 'No previous app instance running'
                     }
-                    bat 'pm2 start dist/index.js --name "sys-backend" --watch -- -p %PORT%'
+                    // bat 'pm2 start dist/index.js --name "sys-backend" --watch -- -p %PORT%'
+                    bat 'pm2 start dist/index.js --name "sys-backend" --watch -- -p %PORT% --pm2-home "C:\\Users\\jenkins\\.pm2"'
                     bat 'pm2 save'
                 }
             }
