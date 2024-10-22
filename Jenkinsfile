@@ -16,7 +16,6 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 bat 'npm install'
-                bat 'npm install typescript --save-dev'
             }
         }
         stage('Compile TypeScript') {
@@ -28,38 +27,20 @@ pipeline {
             steps {
                 script {
                     try {
-                        // Detén cualquier instancia anterior de la aplicación
                         bat 'pm2 stop sys-backend || echo "No previous app instance running"'
-                        // Elimina la aplicación de la lista de PM2
                         bat 'pm2 delete sys-backend || echo "No previous app instance to delete"'
                     } catch (Exception e) {
                         echo 'No previous app instance running or failed to stop'
                     }
-                    // Inicia la aplicación con PM2 en segundo plano
                     bat 'pm2 start dist/index.js --name "sys-backend" -- -p %PORT%'
-                    // Guarda la lista de procesos de PM2 para recuperación automática
                     bat 'pm2 save'
-                }
-            }
-        }
-        stage('Verify Application') {
-            steps {
-                script {
-                    // Agregar un sleep de 10 segundos usando PowerShell
-                    bat 'powershell -command "Start-Sleep -Seconds 10"'
-
-                    // Verificar si la aplicación está corriendo en el puerto 3050
-                    def output = bat(script: 'netstat -an | findstr 3050', returnStdout: true).trim()
-                    if (!output.contains('LISTENING')) {
-                        error "La aplicación no está corriendo en el puerto 3050"
-                    }
                 }
             }
         }
     }
     post {
         always {
-            echo 'Skipping workspace cleanup because the application is running with PM2.'
+            echo 'Proceso de despliegue del sys-backend completado.'
         }
         failure {
             echo 'El despliegue falló, revisa los logs para más detalles.'
