@@ -58,8 +58,8 @@ pipeline {
                         // Detener el servicio si está corriendo
                         bat '''
                             cd C:\\tools\\winsw
-                            WinSW-x64.exe stop || echo "El servicio no estaba corriendo"
-                            $WinSW-x64.exe uninstall || echo "El servicio no estaba instalado"
+                            WinSW-x64.exe stop sys-backend || echo "El servicio no estaba corriendo"
+                            $WinSW-x64.exe uninstall sys-backend || echo "El servicio no estaba instalado"
                         '''
                     } catch (Exception e) {
                         echo 'No previous app instance running or failed to stop'
@@ -67,14 +67,12 @@ pipeline {
 
                     // Instalar el servicio usando WinSW-x64
                     bat '''
-                        cd ${winswPath}
-                        ${serviceName}.exe install ${xmlPath}
+                        WinSW-x64.exe install sys-backend.xml
                     '''
 
                     // Iniciar el servicio
                    bat '''
-                        cd ${winswPath}
-                        ${serviceName}.exe start
+                        WinSW-x64.exe start sys-backend
                     '''
                 }
             }
