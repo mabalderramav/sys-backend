@@ -4,6 +4,7 @@ pipeline {
     environment {
         CONNECTION_STRING = 'postgresql://postgres.faggntrzkifpwlwsuumd:58@G_ZHj6Z8i_7-@aws-0-us-west-1.pooler.supabase.com:6543/postgres'
         PORT = '3050'
+        // PM2_HOME = 'C:\\tools\\.pm2'
     }
 
     stages {
@@ -17,6 +18,11 @@ pipeline {
                 bat 'npm install'
             }
         }
+        // stage('Install PM2') {
+        //     steps {
+        //         bat 'npm install -g pm2'
+        //     }
+        // }
         stage('Compile TypeScript') {
             steps {
                 bat 'npx tsc'
@@ -25,24 +31,30 @@ pipeline {
         stage('Deploy with PowerShell') {
             steps {
                 script {
-                    // Detener cualquier instancia anterior
-                    bat '''
-                        powershell -Command "try { Stop-Process -Name node -Force -ErrorAction SilentlyContinue } catch { echo No previous app instance running }"
-                    '''
+                    // Detener cualquier instancia anterior si es necesario
+                    bat 'powershell -Command "Stop-Process -Name node -Force -ErrorAction SilentlyContinue" || echo No previous app instance running'
 
-                    // Iniciar la aplicación en segundo plano
+                    // Iniciar la aplicación en segundo plano como un trabajo independiente
                     bat '''
-                        powershell -Command "Start-Process -FilePath 'node' -ArgumentList 'dist/index.js -p 3050' -NoNewWindow -PassThru"
+                        powershell -Command "Start-Job -ScriptBlock {
+                            Start-Process -FilePath node -ArgumentList 'dist/index.js -p 3050' -NoNewWindow -RedirectStandardOutput 'C:\\data\\jenkins_home\\workspace\\backend\\app.log' -RedirectStandardError 'C:\\data\\jenkins_home\\workspace\\backend\\app_error.log'
+                        }"
                     '''
                 }
             }
         }
+
         stage('Verify Application') {
             steps {
                 script {
-                    // Esperar unos segundos para asegurarse de que la aplicación esté en ejecución
-                    sleep 10
-                    bat 'netstat -an | findstr 3050'
+                    // Agregar un sleep de 10 segundos usando PowerShell
+                    bat 'powershell -command "Start-Sleep -Seconds 10"'
+
+                    // Verificar si la aplicación está corriendo en el puerto 3050
+                    def output = bat(script: 'netstat -an | findstr 3050', returnStdout: true).trim()
+                    if (!output.contains('LISTENING')) {
+                        error "La aplicación no está corriendo en el puerto 3050"
+                    }
                 }
             }
         }
