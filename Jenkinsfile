@@ -41,8 +41,8 @@ pipeline {
                     } catch (Exception e) {
                         echo 'No previous app instance running'
                     }
-                    // Inicia la aplicación usando forever
-                    bat 'forever start -a --minUptime 1000 --spinSleepTime 1000 dist/index.js -p 3050'
+                    // Inicia la aplicación usando forever y guarda los logs
+                    bat 'forever start -a --minUptime 1000 --spinSleepTime 1000 -l forever.log -o out.log -e err.log dist/index.js -p 3050'
                 }
             }
         }
@@ -56,7 +56,14 @@ pipeline {
                 }
             }
         }
-
+        stage('Check Forever Logs') {
+            steps {
+                // Muestra el contenido de los logs para depuración
+                bat 'type forever.log'
+                bat 'type out.log'
+                bat 'type err.log'
+            }
+        }
     }
     post {
         always {
