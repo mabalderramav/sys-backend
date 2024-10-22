@@ -32,18 +32,20 @@ pipeline {
             steps {
                 script {
                     // Intentar detener cualquier proceso de Node.js que esté corriendo
-                    bat '''
-                        powershell -Command "try { Stop-Process -Name node -Force -ErrorAction Stop } catch { Write-Output 'No previous app instance running' }"
+                    powershell '''
+                        try {
+                            Stop-Process -Name node -Force -ErrorAction Stop
+                        } catch {
+                            Write-Output "No previous app instance running"
+                        }
                     '''
 
                     // Iniciar la aplicación en segundo plano
-                    bat '''
-                        powershell -Command "
+                    powershell '''
                         $script = {
                             Start-Process -FilePath node -ArgumentList 'dist/index.js -p 3050' -PassThru -NoNewWindow -RedirectStandardOutput 'C:\\data\\jenkins_home\\workspace\\backend\\app.log' -RedirectStandardError 'C:\\data\\jenkins_home\\workspace\\backend\\app_error.log'
                         }
                         Start-Job -ScriptBlock $script | Out-Null
-                        "
                     '''
                 }
             }
