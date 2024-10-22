@@ -4,7 +4,7 @@ pipeline {
     environment {
         CONNECTION_STRING = 'postgresql://postgres.faggntrzkifpwlwsuumd:58@G_ZHj6Z8i_7-@aws-0-us-west-1.pooler.supabase.com:6543/postgres'
         PORT = '3050'
-        PM2_HOME = 'C:\\etc\\.pm2'
+        PM2_HOME = 'C:\\\tools\\pm2\\.pm2'
     }
 
     stages {
@@ -40,7 +40,7 @@ pipeline {
                         echo 'No previous app instance running or failed to stop'
                     }
                     // Inicia la aplicación con PM2 en segundo plano
-                    bat 'pm2 start dist/index.js --name "sys-backend" --watch -- -p 3050'
+                    bat 'pm2 start dist/index.js --name "sys-backend" --watch -- -p %PORT%'
                     // Guarda la lista de procesos de PM2 para recuperación automática
                     bat 'pm2 save'
                 }
@@ -49,9 +49,9 @@ pipeline {
         stage('Verify Application') {
             steps {
                 script {
-                    def output = bat(script: 'netstat -an | findstr 3050', returnStdout: true).trim()
+                    def output = bat(script: 'netstat -an | findstr %PORT%', returnStdout: true).trim()
                     if (!output.contains('LISTENING')) {
-                        error "La aplicación no está corriendo en el puerto 3050"
+                        error "La aplicación no está corriendo en el puerto %PORT%"
                     }
                 }
             }
