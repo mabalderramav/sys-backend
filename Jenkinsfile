@@ -49,6 +49,7 @@ pipeline {
         stage('Verify Application') {
             steps {
                 script {
+                    sleep(time: 10, unit: 'SECONDS')  // Agrega un retraso para dar tiempo a que la aplicación se inicie
                     def output = bat(script: 'netstat -an | findstr 3050', returnStdout: true).trim()
                     if (!output.contains('LISTENING')) {
                         error "La aplicación no está corriendo en el puerto 3050"
@@ -68,6 +69,15 @@ pipeline {
     post {
         always {
             echo 'Skipping workspace cleanup because the application is running with forever.'
+            // Muestra los logs de Forever aunque la compilación haya fallado
+            script {
+                bat 'type forever.log'
+                bat 'type out.log'
+                bat 'type err.log'
+            }
+        }
+        failure {
+            echo 'El despliegue falló, revisa los logs para más detalles.'
         }
     }
 }
