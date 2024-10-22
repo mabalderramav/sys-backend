@@ -31,12 +31,12 @@ pipeline {
         stage('Deploy with PowerShell') {
             steps {
                 script {
-                    // Detener cualquier instancia anterior de Node.js
+                    // Intentar detener cualquier proceso de Node.js que esté corriendo
                     bat '''
-                        powershell -Command "try { Stop-Process -Name node -Force -ErrorAction SilentlyContinue } catch { echo No previous app instance running }"
+                        powershell -Command "try { Stop-Process -Name node -Force -ErrorAction Stop } catch { Write-Output 'No previous app instance running' }"
                     '''
 
-                    // Iniciar la aplicación en segundo plano usando un script de PowerShell para que persista
+                    // Iniciar la aplicación en segundo plano
                     bat '''
                         powershell -Command "
                         $script = {
