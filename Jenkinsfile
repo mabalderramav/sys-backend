@@ -40,12 +40,9 @@ pipeline {
                         }
                     '''
 
-                    // Iniciar la aplicación en segundo plano
+                    // Iniciar la aplicación en segundo plano de manera persistente
                     powershell '''
-                        $script = {
-                            Start-Process -FilePath node -ArgumentList 'dist/index.js -p 3050' -PassThru -NoNewWindow -RedirectStandardOutput 'C:\\data\\jenkins_home\\workspace\\backend\\app.log' -RedirectStandardError 'C:\\data\\jenkins_home\\workspace\\backend\\app_error.log'
-                        }
-                        Start-Job -ScriptBlock $script | Out-Null
+                        Start-Process -FilePath node -ArgumentList 'dist/index.js -p 3050' -PassThru -NoNewWindow -RedirectStandardOutput 'C:\\data\\jenkins_home\\workspace\\backend\\app.log' -RedirectStandardError 'C:\\data\\jenkins_home\\workspace\\backend\\app_error.log' -WorkingDirectory 'C:\\data\\jenkins_home\\workspace\\backend'
                     '''
                 }
             }
