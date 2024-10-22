@@ -49,10 +49,13 @@ pipeline {
         stage('Verify Application') {
             steps {
                 script {
-                    sleep 10 // Esperar un poco para asegurar que el servidor esté listo
-                    def logOutput = bat(script: 'type out.log', returnStdout: true).trim()
-                    if (!logOutput.contains('Servidor corriendo en http://localhost:%PORT%')) {
-                        error "La aplicación no se inició correctamente."
+                    // Agregar un sleep de 10 segundos
+                    bat 'timeout /T 10'
+                    
+                    // Verificar si la aplicación está corriendo en el puerto 3050
+                    def output = bat(script: 'netstat -an | findstr 3050', returnStdout: true).trim()
+                    if (!output.contains('LISTENING')) {
+                        error "La aplicación no está corriendo en el puerto 3050"
                     }
                 }
             }
