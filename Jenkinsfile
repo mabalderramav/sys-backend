@@ -4,7 +4,7 @@ pipeline {
     environment {
         CONNECTION_STRING = 'postgresql://postgres.faggntrzkifpwlwsuumd:58@G_ZHj6Z8i_7-@aws-0-us-west-1.pooler.supabase.com:6543/postgres'
         PORT = '3050'
-        PM2_HOME = 'C:\\etc\\.pm2'
+        PM2_HOME = 'C:\\tools\\.pm2'
     }
 
     stages {
@@ -49,9 +49,10 @@ pipeline {
         stage('Verify Application') {
             steps {
                 script {
-                    def output = bat(script: 'netstat -an | findstr %PORT%', returnStdout: true).trim()
-                    if (!output.contains('LISTENING')) {
-                        error "La aplicación no está corriendo en el puerto %PORT%"
+                    sleep 10 // Esperar un poco para asegurar que el servidor esté listo
+                    def logOutput = bat(script: 'type out.log', returnStdout: true).trim()
+                    if (!logOutput.contains('Servidor corriendo en http://localhost:%PORT%')) {
+                        error "La aplicación no se inició correctamente."
                     }
                 }
             }
