@@ -31,18 +31,19 @@ pipeline {
         stage('Deploy with PM2') {
             steps {
                 script {
-                    // Instalar `pm2` globalmente si no está instalado
-                    bat 'npm install -g pm2'
-
-                    // Detener cualquier proceso previo de pm2 llamado "sys-backend"
-                    bat 'pm2 delete sys-backend || echo "No hay una instancia previa corriendo"'
-
-                    // Iniciar la aplicación con pm2 y configurarla para ejecutarse como un servicio
-                    bat 'pm2 start dist/index.js --name sys-backend --watch -- -p 3050'
-
-                    // Guardar la configuración de pm2 para restaurar en el reinicio del sistema
+                    try {
+                        // Detén cualquier instancia anterior de la aplicación
+                        bat 'pm2 stop sys-backend || echo "No previous app instance running"'
+                        // Elimina la aplicación de la lista de PM2
+                        bat 'pm2 delete sys-backend || echo "No previous app instance to delete"'
+                    } catch (Exception e) {
+                        echo 'No previous app instance running or failed to stop'
+                    }
+                    // Inicia la aplicación con PM2 en segundo plano
+                    bat 'pm2 start dist/index.js --name "sys-backend" -- -p %PORT%'
+                    // Guarda la lista de procesos de PM2 para recuperación automática
                     bat 'pm2 save'
-
+                    
                     // Hacer que pm2 se inicie automáticamente cuando el sistema arranca
                     bat 'pm2 startup'
                 }
