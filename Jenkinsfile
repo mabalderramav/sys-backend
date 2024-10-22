@@ -57,9 +57,9 @@ pipeline {
                     try {
                         // Detener el servicio si está corriendo
                         bat '''
-                            cd ${winswPath}
-                            ${serviceName}.exe stop || echo "El servicio no estaba corriendo"
-                            ${serviceName}.exe uninstall || echo "El servicio no estaba instalado"
+                            cd C:\tools\winsw
+                            WinSW-x64.exe stop || echo "El servicio no estaba corriendo"
+                            $WinSW-x64.exe uninstall || echo "El servicio no estaba instalado"
                         '''
                     } catch (Exception e) {
                         echo 'No previous app instance running or failed to stop'
