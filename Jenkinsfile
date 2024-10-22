@@ -50,21 +50,32 @@ pipeline {
         stage('Deploy with WinSW') {
             steps {
                 script {
+                    // Ruta a WinSW y al archivo de configuración .xml
+                    def winswPath = 'C:\\tools\\winsw'
+                    def serviceName = 'sys-backend'
+                    def xmlPath = "${winswPath}\\${serviceName}.xml"
                     try {
                         // Detener el servicio si está corriendo
                         bat '''
-                            C:\\tools\\winsw\\WinSW-x64.exe stop sys-backend || echo "El servicio no estaba corriendo"
-                            C:\\tools\\winsw\\WinSW-x64.exe uninstall sys-backend || echo "El servicio no estaba instalado"
+                            cd ${winswPath}
+                            ${serviceName}.exe stop || echo "El servicio no estaba corriendo"
+                            ${serviceName}.exe uninstall || echo "El servicio no estaba instalado"
                         '''
                     } catch (Exception e) {
                         echo 'No previous app instance running or failed to stop'
                     }
 
                     // Instalar el servicio usando WinSW-x64
-                    bat 'C:\\tools\\winsw\\WinSW-x64.exe install C:\\tools\\winsw\\sys-backend.xml'
+                    bat '''
+                        cd ${winswPath}
+                        ${serviceName}.exe install ${xmlPath}
+                    '''
 
                     // Iniciar el servicio
-                    bat 'C:\\tools\\winsw\\WinSW-x64.exe start sys-backend'
+                   bat '''
+                        cd ${winswPath}
+                        ${serviceName}.exe start
+                    '''
                 }
             }
         }
