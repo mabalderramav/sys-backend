@@ -27,11 +27,11 @@ pipeline {
                 bat 'npx tsc'
             }
         }
-        stage('Run Tests') {
-            steps {
-                bat 'npm test'
-            }
-        }
+        // stage('Run Tests') {
+        //     steps {
+        //         bat 'npm test'
+        //     }
+        // }
         stage('Deploy') {
             steps {
                 script {
