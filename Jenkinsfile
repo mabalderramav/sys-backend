@@ -49,9 +49,9 @@ pipeline {
         stage('Verify Application') {
             steps {
                 script {
-                    // Agregar un sleep de 10 segundos
-                    bat 'timeout /T 10'
-                    
+                    // Agregar un sleep de 10 segundos usando PowerShell
+                    bat 'powershell -command "Start-Sleep -Seconds 10"'
+
                     // Verificar si la aplicación está corriendo en el puerto 3050
                     def output = bat(script: 'netstat -an | findstr 3050', returnStdout: true).trim()
                     if (!output.contains('LISTENING')) {
