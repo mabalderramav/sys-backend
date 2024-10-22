@@ -40,9 +40,16 @@ pipeline {
                         echo 'No previous app instance running or failed to stop'
                     }
                     // Inicia la aplicación con PM2 en segundo plano
-                    bat 'pm2 start dist/index.js --name "sys-backend" --watch -- -p %PORT%'
+                    bat 'pm2 start dist/index.js --name "sys-backend" -- -p %PORT%'
                     // Guarda la lista de procesos de PM2 para recuperación automática
                     bat 'pm2 save'
+                }
+            }
+        }
+        stage('Check PM2 Logs') {
+            steps {
+                script {
+                    bat 'pm2 logs sys-backend --lines 100'
                 }
             }
         }
