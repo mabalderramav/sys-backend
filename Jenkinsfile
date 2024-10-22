@@ -44,8 +44,6 @@ pipeline {
                     // Guarda la lista de procesos de PM2 para recuperación automática
                     bat 'pm2 save'
                     
-                    // Hacer que pm2 se inicie automáticamente cuando el sistema arranca
-                    bat 'pm2 startup'
                 }
             }
         }
