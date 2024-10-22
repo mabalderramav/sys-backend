@@ -34,8 +34,12 @@ pipeline {
                     // Detener cualquier instancia anterior si es necesario
                     bat 'powershell -Command "Stop-Process -Name node -Force -ErrorAction SilentlyContinue" || echo No previous app instance running'
 
-                    // Iniciar la aplicación en segundo plano
-                    bat 'powershell -Command "Start-Process -FilePath node -ArgumentList \'dist/index.js -p 3050\' -NoNewWindow -RedirectStandardOutput \'C:\\data\\jenkins_home\\workspace\\backend\\app.log\' -RedirectStandardError \'C:\\data\\jenkins_home\\workspace\\backend\\app_error.log\'"'
+                    // Iniciar la aplicación en segundo plano como un trabajo independiente
+                    bat '''
+                        powershell -Command "Start-Job -ScriptBlock {
+                            Start-Process -FilePath node -ArgumentList 'dist/index.js -p 3050' -NoNewWindow -RedirectStandardOutput 'C:\\data\\jenkins_home\\workspace\\backend\\app.log' -RedirectStandardError 'C:\\data\\jenkins_home\\workspace\\backend\\app_error.log'
+                        }"
+                    '''
                 }
             }
         }
