@@ -46,13 +46,6 @@ pipeline {
                 }
             }
         }
-        stage('Check PM2 Logs') {
-            steps {
-                script {
-                    bat 'pm2 logs sys-backend --lines 100'
-                }
-            }
-        }
         stage('Verify Application') {
             steps {
                 script {
