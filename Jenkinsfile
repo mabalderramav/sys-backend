@@ -42,10 +42,21 @@ pipeline {
                         echo 'No previous app instance running'
                     }
                     // Inicia la aplicación usando forever
-                    bat 'forever start dist/index.js -p 3050'
+                    bat 'forever start -a --minUptime 1000 --spinSleepTime 1000 dist/index.js -p 3050'
                 }
             }
         }
+        stage('Verify Application') {
+            steps {
+                script {
+                    def output = bat(script: 'netstat -an | findstr 3050', returnStdout: true).trim()
+                    if (!output.contains('LISTENING')) {
+                        error "La aplicación no está corriendo en el puerto 3050"
+                    }
+                }
+            }
+        }
+
     }
     post {
         always {
