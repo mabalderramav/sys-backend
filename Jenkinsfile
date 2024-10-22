@@ -57,7 +57,7 @@ pipeline {
                     try {
                         // Detener el servicio si está corriendo
                         bat '''
-                            cd C:\tools\winsw
+                            cd C:\\tools\\winsw
                             WinSW-x64.exe stop || echo "El servicio no estaba corriendo"
                             $WinSW-x64.exe uninstall || echo "El servicio no estaba instalado"
                         '''
