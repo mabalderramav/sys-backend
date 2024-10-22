@@ -68,7 +68,7 @@ pipeline {
                     // Instalar el servicio usando WinSW-x64
                     bat '''
                         cd C:\\tools\\winsw
-                        WinSW-x64.exe install
+                        WinSW-x64.exe install -c C:\\tools\\winsw\\sys-backend.xml
                     '''
 
                     // Iniciar el servicio
