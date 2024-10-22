@@ -31,14 +31,19 @@ pipeline {
         stage('Deploy with PowerShell') {
             steps {
                 script {
-                    // Detener cualquier instancia anterior si es necesario
-                    bat 'powershell -Command "Stop-Process -Name node -Force -ErrorAction SilentlyContinue" || echo No previous app instance running'
-
-                    // Iniciar la aplicación en segundo plano como un trabajo independiente
+                    // Detener cualquier instancia anterior de Node.js
                     bat '''
-                        powershell -Command "Start-Job -ScriptBlock {
-                            Start-Process -FilePath node -ArgumentList 'dist/index.js -p 3050' -NoNewWindow -RedirectStandardOutput 'C:\\data\\jenkins_home\\workspace\\backend\\app.log' -RedirectStandardError 'C:\\data\\jenkins_home\\workspace\\backend\\app_error.log'
-                        }"
+                        powershell -Command "try { Stop-Process -Name node -Force -ErrorAction SilentlyContinue } catch { echo No previous app instance running }"
+                    '''
+
+                    // Iniciar la aplicación en segundo plano usando un script de PowerShell para que persista
+                    bat '''
+                        powershell -Command "
+                        $script = {
+                            Start-Process -FilePath node -ArgumentList 'dist/index.js -p 3050' -PassThru -NoNewWindow -RedirectStandardOutput 'C:\\data\\jenkins_home\\workspace\\backend\\app.log' -RedirectStandardError 'C:\\data\\jenkins_home\\workspace\\backend\\app_error.log'
+                        }
+                        Start-Job -ScriptBlock $script | Out-Null
+                        "
                     '''
                 }
             }
