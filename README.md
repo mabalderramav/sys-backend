@@ -61,6 +61,10 @@ Para configurar el despliegue automatizado con Jenkins, sigue los pasos a contin
     ```bash
     pm2 list
     ```
+    Crear directorio .pm2
+    ```bash
+    cd C:\\tools & mkdir .pm2
+    ```
 
 - **Configurar un nuevo pipeline**:
     1. New Item
