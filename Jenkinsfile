@@ -3,7 +3,8 @@ pipeline {
 
     environment {
         CONNECTION_STRING = 'postgresql://postgres.faggntrzkifpwlwsuumd:58@G_ZHj6Z8i_7-@aws-0-us-west-1.pooler.supabase.com:6543/postgres'
-        PORT = '3050'  // Define el puerto en el que la aplicación debe correr
+        PORT = '3050'
+        PM2_HOME = 'C:\\etc\\.pm2'
     }
 
     stages {
