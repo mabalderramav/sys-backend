@@ -64,17 +64,17 @@ Esta es una API RESTful para un sistema de ventas, creada con Express en Node.js
     >![Logo de Node.js](https://firebasestorage.googleapis.com/v0/b/platziredux.appspot.com/o/nodejs.PNG?alt=media&token=6c5864e7-e0d4-42e5-a697-c05c56074663)
 
 - **Configurar un nuevo pipeline**:
-    1. New Item
+    - New Item
         - Name: **sys-backend**
         - Type: Pipeline
-    2. Pipeline
+    - Pipeline
         - Definition: Pipeline script from SCM
             - SCM: Git
                 - Repository URL: https://github.com/enunez-dev/sys-backend.git
                 - Branch Specifier: */master
             - Script Path: Jenkinsfile
-    3. (Save)
-    4. Build Now
+    - (Save)
+    - Build Now
 
 ## Uso
 Una vez en funcionamiento, la API estará disponible en http://localhost:3050 (o el puerto configurado). A continuación, se encuentran ejemplos de las rutas:
