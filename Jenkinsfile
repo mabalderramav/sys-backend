@@ -28,6 +28,25 @@ pipeline {
                 bat 'npx tsc'
             }
         }
+        // stage('Deploy with PowerShell') {
+        //     steps {
+        //         script {
+        //             // Intentar detener cualquier proceso de Node.js que esté corriendo
+        //             powershell '''
+        //                 try {
+        //                     Stop-Process -Name node -Force -ErrorAction Stop
+        //                 } catch {
+        //                     Write-Output "No previous app instance running"
+        //                 }
+        //             '''
+
+        //             // Iniciar la aplicación en segundo plano de manera persistente
+        //             powershell '''
+        //                 Start-Process -FilePath node -ArgumentList 'dist/index.js -p 3050' -PassThru -NoNewWindow -RedirectStandardOutput 'C:\\data\\jenkins_home\\workspace\\backend\\app.log' -RedirectStandardError 'C:\\data\\jenkins_home\\workspace\\backend\\app_error.log' -WorkingDirectory 'C:\\data\\jenkins_home\\workspace\\backend'
+        //             '''
+        //         }
+        //     }
+        // }
         stage('Deploy with PowerShell') {
             steps {
                 script {
@@ -42,7 +61,7 @@ pipeline {
 
                     // Iniciar la aplicación en segundo plano de manera persistente
                     powershell '''
-                        Start-Process -FilePath node -ArgumentList 'dist/index.js -p 3050' -PassThru -NoNewWindow -RedirectStandardOutput 'C:\\data\\jenkins_home\\workspace\\backend\\app.log' -RedirectStandardError 'C:\\data\\jenkins_home\\workspace\\backend\\app_error.log' -WorkingDirectory 'C:\\data\\jenkins_home\\workspace\\backend'
+                        Start-Process -FilePath "powershell.exe" -ArgumentList "node dist/index.js -p 3050" -WindowStyle Hidden
                     '''
                 }
             }
