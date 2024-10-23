@@ -22,9 +22,12 @@ pipeline {
         stage('Find PM2 Path') {
             steps {
                 script {
+                    // Capturar el nombre de usuario actual
+                    def username = bat(script: 'echo %USERNAME%', returnStdout: true).trim()
+
                     // Intentar encontrar pm2 en una ruta común de instalación global
                     def possiblePm2Paths = [
-                        'C:\\Users\\enunez\\AppData\\Roaming\\npm\\pm2.cmd',
+                        'C:\\Users\\${username}\\AppData\\Roaming\\npm\\pm2.cmd',
                         'C:\\Program Files\\nodejs\\pm2.cmd',
                         'C:\\tools\\npm\\pm2.cmd'
                     ]
