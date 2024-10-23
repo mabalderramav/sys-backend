@@ -31,6 +31,7 @@ pipeline {
                         'C:\\Program Files\\nodejs\\pm2.cmd',
                         'C:\\tools\\npm\\pm2.cmd'
                     ]
+                    echo "possiblePm2Paths: ${possiblePm2Paths}"
                     def foundPm2Path = possiblePm2Paths.find { path ->
                         fileExists(path)
                     }
