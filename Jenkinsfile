@@ -22,8 +22,8 @@ pipeline {
         stage('Find PM2 Path') {
             steps {
                 script {
-                    // Capturar el nombre de usuario actual
-                    def username = bat(script: 'echo %USERNAME%', returnStdout: true).trim()
+                    // Capturar el nombre de usuario actual usando PowerShell
+                    def username = bat(script: 'powershell -Command "[System.Security.Principal.WindowsIdentity]::GetCurrent().Name.Split(\'\\\\\')[1]"', returnStdout: true).trim()
 
                     // Intentar encontrar pm2 en una ruta común de instalación global
                     def possiblePm2Paths = [
