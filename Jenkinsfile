@@ -22,14 +22,11 @@ pipeline {
         stage('Set PM2 Path') {
             steps {
                 script {
-                    // Obtener el directorio donde npm instala binarios globalmente
-                    def npmGlobalBin = bat(script: 'npm bin -g', returnStdout: true).trim()
+                    // Usar PowerShell para encontrar la ruta completa de pm2.cmd
+                    def pm2Path = bat(script: 'powershell -Command "(Get-Command pm2.cmd).Source"', returnStdout: true).trim()
                     
                     // Configurar la ruta completa de pm2
-                    def pm2Executable = "${npmGlobalBin}\\pm2.cmd"
-                    
-                    // Asignar la ruta completa de pm2 a una variable de entorno
-                    env.PM2_PATH = pm2Executable
+                    env.PM2_PATH = pm2Path
                     echo "PM2 se encuentra en: ${env.PM2_PATH}"
                 }
             }
