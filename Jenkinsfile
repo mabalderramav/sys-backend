@@ -5,6 +5,7 @@ pipeline {
         CONNECTION_STRING = 'postgresql://postgres.faggntrzkifpwlwsuumd:58@G_ZHj6Z8i_7-@aws-0-us-west-1.pooler.supabase.com:6543/postgres'
         PORT = '3050'
         PM2_HOME = 'C:\\tools\\.pm2'
+        NPM_GLOBAL_PATH = "${env.USERPROFILE}\\AppData\\Roaming\\npm" // Ruta típica de instalación global de npm en Windows
     }
 
     stages {
@@ -21,6 +22,9 @@ pipeline {
         stage('Find PM2 Path') {
             steps {
                 script {
+                    // Añadir la ruta global de npm al PATH para que Jenkins pueda encontrar pm2
+                    env.PATH = "${env.NPM_GLOBAL_PATH};${env.PATH}"
+
                     // Encontrar la ruta de pm2 y guardarla en una variable
                     def pm2PathOutput = bat(script: 'where pm2', returnStdout: true).trim()
                     if (!pm2PathOutput) {
@@ -41,6 +45,7 @@ pipeline {
             steps {
                 script {
                     try {
+                        // Detener cualquier instancia anterior
                         bat "\"${env.PM2_PATH}\" stop sys-backend || echo \"No previous app instance running\""
                         bat "\"${env.PM2_PATH}\" delete sys-backend || echo \"No previous app instance to delete\""
                     } catch (Exception e) {
