@@ -22,25 +22,13 @@ pipeline {
         stage('Find PM2 Path') {
             steps {
                 script {
-                    // Usar un script de Node.js para encontrar la ruta de pm2
-                    def pm2PathScript = '''
-                        const which = require('which');
-                        try {
-                            const pm2Path = which.sync('pm2');
-                            console.log(pm2Path);
-                        } catch (err) {
-                            console.error('PM2 not found');
-                            process.exit(1);
-                        }
-                    '''
+                    // Ejecutar el comando where para encontrar pm2 y almacenar la ruta en la variable de entorno PM2_PATH
+                    def pm2PathOutput = bat(script: 'where pm2', returnStdout: true).trim()
 
-                    // Ejecutar el script y capturar la salida
-                    def pm2Path = bat(script: "node -e \"${pm2PathScript}\"", returnStdout: true).trim()
-
-                    if (pm2Path.contains('PM2 not found')) {
+                    if (pm2PathOutput.contains('INFO: No se pudo encontrar ningún archivo')) {
                         error "No se pudo encontrar la ruta de PM2"
                     } else {
-                        env.PM2_PATH = pm2Path
+                        env.PM2_PATH = pm2PathOutput
                         echo "PM2 se encuentra en: ${env.PM2_PATH}"
                     }
                 }
