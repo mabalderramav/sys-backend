@@ -27,9 +27,8 @@ pipeline {
                     echo "loggedUser: ${loggedUser}"
                     // Intentar encontrar pm2 en una ruta común de instalación global
                     def possiblePm2Paths = [
-                        'C:\\Users\\${loggedUser}\\AppData\\Roaming\\npm\\pm2.cmd',
-                        'C:\\Program Files\\nodejs\\pm2.cmd',
-                        'C:\\tools\\npm\\pm2.cmd'
+                        "C:\\Users\\${loggedUser}\\AppData\\Roaming\\npm\\pm2.cmd",
+                        "C:\\Program Files\\nodejs\\pm2.cmd",
                     ]
                     echo "possiblePm2Paths: ${possiblePm2Paths}"
                     def foundPm2Path = possiblePm2Paths.find { path ->
