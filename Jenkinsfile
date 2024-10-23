@@ -24,12 +24,12 @@ pipeline {
                 script {
                     // Capturar el nombre de usuario actual usando PowerShell
                     def loggedUser = bat(script: 'powershell -Command "(Get-WmiObject -Class Win32_ComputerSystem).UserName.Split(\'\\\\\')[1]"', returnStdout: true).trim()
-                    loggedUser = loggedUser.split("\r\n")[-1].trim()
+                    loggedUser = loggedUser.split('\r\n')[-1].trim()
                     echo "loggedUser: ${loggedUser}"
                     // Intentar encontrar pm2 en una ruta común de instalación global
                     def possiblePm2Paths = [
                         "C:\\Users\\${loggedUser}\\AppData\\Roaming\\npm\\pm2.cmd",
-                        "C:\\Program Files\\nodejs\\pm2.cmd",
+                        'C:\\Program Files\\nodejs\\pm2.cmd',
                     ]
                     echo "possiblePm2Paths: ${possiblePm2Paths}"
                     def foundPm2Path = possiblePm2Paths.find { path ->
@@ -40,7 +40,7 @@ pipeline {
                         env.PM2_PATH = foundPm2Path
                         echo "PM2 se encuentra en: ${env.PM2_PATH}"
                     } else {
-                        error "No se pudo encontrar la ruta de PM2 en las ubicaciones conocidas"
+                        error 'No se pudo encontrar la ruta de PM2 en las ubicaciones conocidas'
                     }
                 }
             }
@@ -48,6 +48,13 @@ pipeline {
         stage('Compile TypeScript') {
             steps {
                 bat 'npx tsc'
+            }
+        }
+        stage('Run Integration Test') {
+            steps {
+                script {
+                    bat 'npm test'
+                }
             }
         }
         stage('Deploy with PM2') {
