@@ -49,6 +49,13 @@ pipeline {
                 bat 'npx tsc'
             }
         }
+        stage('Run Integration Test') {
+            steps {
+                script {
+                    bat 'npm test'
+                }
+            }
+        }
         stage('Deploy with PM2') {
             steps {
                 script {
