@@ -22,14 +22,21 @@ pipeline {
         stage('Find PM2 Path') {
             steps {
                 script {
-                    // Ejecutar el comando where para encontrar pm2 y almacenar la ruta en la variable de entorno PM2_PATH
-                    def pm2PathOutput = bat(script: 'where pm2', returnStdout: true).trim()
+                    // Intentar encontrar pm2 en una ruta común de instalación global
+                    def possiblePm2Paths = [
+                        'C:\\Users\\enunez\\AppData\\Roaming\\npm\\pm2.cmd',
+                        'C:\\Program Files\\nodejs\\pm2.cmd',
+                        'C:\\tools\\npm\\pm2.cmd'
+                    ]
+                    def foundPm2Path = possiblePm2Paths.find { path ->
+                        fileExists(path)
+                    }
 
-                    if (pm2PathOutput.contains('INFO: No se pudo encontrar ningún archivo')) {
-                        error "No se pudo encontrar la ruta de PM2"
-                    } else {
-                        env.PM2_PATH = pm2PathOutput
+                    if (foundPm2Path) {
+                        env.PM2_PATH = foundPm2Path
                         echo "PM2 se encuentra en: ${env.PM2_PATH}"
+                    } else {
+                        error "No se pudo encontrar la ruta de PM2 en las ubicaciones conocidas"
                     }
                 }
             }
