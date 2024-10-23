@@ -61,7 +61,7 @@ Esta es una API RESTful para un sistema de ventas, creada con Express en Node.js
     - **Name**: NodeJS 20
     - **Installation directory**: Ruta donde esta instalado node ejm: C:\Program Files\nodejs
     - **Install automatically**: (uncheck)
-    >![Logo de Node.js](https://firebasestorage.googleapis.com/v0/b/platziredux.appspot.com/o/nodejs.PNG?alt=media&token=6c5864e7-e0d4-42e5-a697-c05c56074663)
+    >![Node.js](https://firebasestorage.googleapis.com/v0/b/platziredux.appspot.com/o/nodejs.PNG?alt=media&token=6c5864e7-e0d4-42e5-a697-c05c56074663)
 
 - **Configurar un nuevo pipeline**:
     - New Item
@@ -75,6 +75,8 @@ Esta es una API RESTful para un sistema de ventas, creada con Express en Node.js
             - Script Path: Jenkinsfile
     - (Save)
     - Build Now
+    Asi querdaria el pipeline [Click aqui](https://firebasestorage.googleapis.com/v0/b/platziredux.appspot.com/o/pipeline.png?alt=media&token=fb7ec7c6-249e-4432-980b-17119091d454)
+    
 
 ## Uso
 Una vez en funcionamiento, la API estará disponible en http://localhost:3050 (o el puerto configurado). A continuación, se encuentran ejemplos de las rutas:
