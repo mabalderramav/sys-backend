@@ -19,15 +19,30 @@ pipeline {
                 bat 'npm install'
             }
         }
-        stage('Set PM2 Path') {
+        stage('Find PM2 Path') {
             steps {
                 script {
-                    // Usar PowerShell para encontrar la ruta completa de pm2.cmd
-                    def pm2Path = bat(script: 'powershell -Command "(Get-Command pm2.cmd).Source"', returnStdout: true).trim()
-                    
-                    // Configurar la ruta completa de pm2
-                    env.PM2_PATH = pm2Path
-                    echo "PM2 se encuentra en: ${env.PM2_PATH}"
+                    // Usar un script de Node.js para encontrar la ruta de pm2
+                    def pm2PathScript = '''
+                        const which = require('which');
+                        try {
+                            const pm2Path = which.sync('pm2');
+                            console.log(pm2Path);
+                        } catch (err) {
+                            console.error('PM2 not found');
+                            process.exit(1);
+                        }
+                    '''
+
+                    // Ejecutar el script y capturar la salida
+                    def pm2Path = bat(script: "node -e \"${pm2PathScript}\"", returnStdout: true).trim()
+
+                    if (pm2Path.contains('PM2 not found')) {
+                        error "No se pudo encontrar la ruta de PM2"
+                    } else {
+                        env.PM2_PATH = pm2Path
+                        echo "PM2 se encuentra en: ${env.PM2_PATH}"
+                    }
                 }
             }
         }
