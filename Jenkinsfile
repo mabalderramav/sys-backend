@@ -27,13 +27,13 @@ pipeline {
             steps {
                 script {
                     try {
-                        bat 'pm2 stop sys-backend || echo "No previous app instance running"'
-                        bat 'pm2 delete sys-backend || echo "No previous app instance to delete"'
+                        bat '%PM2_PATH% stop sys-backend || echo "No previous app instance running"'
+                        bat '%PM2_PATH% delete sys-backend || echo "No previous app instance to delete"'
                     } catch (Exception e) {
                         echo 'No previous app instance running or failed to stop'
                     }
-                    bat 'pm2 start dist/index.js --name "sys-backend" -- -p %PORT%'
-                    bat 'pm2 save'
+                    bat '%PM2_PATH% start dist/index.js --name "sys-backend" -- -p %PORT%'
+                    bat '%PM2_PATH% save'
                 }
             }
         }
