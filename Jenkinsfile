@@ -19,20 +19,18 @@ pipeline {
                 bat 'npm install'
             }
         }
-        stage('Find PM2 Path') {
+        stage('Set PM2 Path') {
             steps {
                 script {
-                    // Añadir la ruta global de npm al PATH para que Jenkins pueda encontrar pm2
-                    env.PATH = "${env.NPM_GLOBAL_PATH};${env.PATH}"
-
-                    // Encontrar la ruta de pm2 y guardarla en una variable
-                    def pm2PathOutput = bat(script: 'where pm2', returnStdout: true).trim()
-                    if (!pm2PathOutput) {
-                        error "PM2 no se encontró en el sistema."
-                    }
-                    // Usar la primera ruta encontrada
-                    env.PM2_PATH = pm2PathOutput.split('\r\n')[0]
-                    echo "PM2 encontrado en: ${env.PM2_PATH}"
+                    // Obtener el directorio donde npm instala binarios globalmente
+                    def npmGlobalBin = bat(script: 'npm bin -g', returnStdout: true).trim()
+                    
+                    // Configurar la ruta completa de pm2
+                    def pm2Executable = "${npmGlobalBin}\\pm2.cmd"
+                    
+                    // Asignar la ruta completa de pm2 a una variable de entorno
+                    env.PM2_PATH = pm2Executable
+                    echo "PM2 se encuentra en: ${env.PM2_PATH}"
                 }
             }
         }
