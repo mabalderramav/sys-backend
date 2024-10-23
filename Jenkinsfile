@@ -24,6 +24,7 @@ pipeline {
                 script {
                     // Capturar el nombre de usuario actual usando PowerShell
                     def loggedUser = bat(script: 'powershell -Command "(Get-WmiObject -Class Win32_ComputerSystem).UserName.Split(\'\\\\\')[1]"', returnStdout: true).trim()
+                    loggedUser = loggedUser.split("\r\n")[-1].trim()
                     echo "loggedUser: ${loggedUser}"
                     // Intentar encontrar pm2 en una ruta común de instalación global
                     def possiblePm2Paths = [
