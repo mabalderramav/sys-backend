@@ -18,6 +18,20 @@ pipeline {
                 bat 'npm install'
             }
         }
+        stage('Find PM2 Path') {
+            steps {
+                script {
+                    // Encontrar la ruta de pm2 y guardarla en una variable
+                    def pm2PathOutput = bat(script: 'where pm2', returnStdout: true).trim()
+                    if (!pm2PathOutput) {
+                        error "PM2 no se encontró en el sistema."
+                    }
+                    // Usar la primera ruta encontrada
+                    env.PM2_PATH = pm2PathOutput.split('\r\n')[0]
+                    echo "PM2 encontrado en: ${env.PM2_PATH}"
+                }
+            }
+        }
         stage('Compile TypeScript') {
             steps {
                 bat 'npx tsc'
@@ -27,13 +41,15 @@ pipeline {
             steps {
                 script {
                     try {
-                        bat '%PM2_PATH% stop sys-backend || echo "No previous app instance running"'
-                        bat '%PM2_PATH% delete sys-backend || echo "No previous app instance to delete"'
+                        bat "\"${env.PM2_PATH}\" stop sys-backend || echo \"No previous app instance running\""
+                        bat "\"${env.PM2_PATH}\" delete sys-backend || echo \"No previous app instance to delete\""
                     } catch (Exception e) {
                         echo 'No previous app instance running or failed to stop'
                     }
-                    bat '%PM2_PATH% start dist/index.js --name "sys-backend" -- -p %PORT%'
-                    bat '%PM2_PATH% save'
+                    // Iniciar la aplicación con PM2 en segundo plano
+                    bat "\"${env.PM2_PATH}\" start dist/index.js --name \"sys-backend\" -- -p %PORT%"
+                    // Guardar la lista de procesos de PM2
+                    bat "\"${env.PM2_PATH}\" save"
                 }
             }
         }
