@@ -16,6 +16,7 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 bat 'npm install'
+                bat 'npm install pm2 -g'
             }
         }
         stage('Compile TypeScript') {
