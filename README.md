@@ -61,7 +61,8 @@ Esta es una API RESTful para un sistema de ventas, creada con Express en Node.js
     - **Name**: NodeJS 20
     - **Installation directory**: Ruta donde esta instalado node ejm: C:\Program Files\nodejs
     - **Install automatically**: (uncheck)
-    >![Node.js](https://firebasestorage.googleapis.com/v0/b/platziredux.appspot.com/o/nodejs.PNG?alt=media&token=6c5864e7-e0d4-42e5-a697-c05c56074663)
+    >Asi quedaria configurado NodeJS [Click aqui](https://drive.google.com/file/d/1MRMhUC3FWB-ikVZ1-TILXyuAQL6zBdHf/view?usp=sharing)
+
 
 - **Configurar un nuevo pipeline**:
     - New Item
@@ -75,7 +76,7 @@ Esta es una API RESTful para un sistema de ventas, creada con Express en Node.js
             - Script Path: Jenkinsfile
     - (Save)
     - Build Now
-    Asi querdaria el pipeline [Click aqui](https://firebasestorage.googleapis.com/v0/b/platziredux.appspot.com/o/pipeline.png?alt=media&token=fb7ec7c6-249e-4432-980b-17119091d454)
+    >Asi quedaria el pipeline [Click aqui](https://drive.google.com/file/d/1s43UYRiMsZ1nh83sj29F3ffuMRrZh3Dg/view?usp=sharing)
     
 
 ## Uso
